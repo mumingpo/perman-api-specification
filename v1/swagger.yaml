@@ -1,0 +1,557 @@
+swagger: "2.0"
+info:
+  description: "This is the API description for Perman-api."
+  version: "1.0"
+  title: "Perman-api"
+  termsOfService: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  contact:
+    email: "mumingpo@gmail.com"
+  # license:
+  #   name: "Apache 2.0"
+  #   url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "api.perman.io"
+basePath: "/v1"
+tags:
+- name: "user"
+  description: "Operations concerning individual users"
+#   externalDocs:
+#     description: "Find out more"
+#     url: "http://swagger.io"
+- name: "record"
+  description: "Operations accessing individual records"
+schemes:
+- "https"
+- "http"
+paths:
+  /user/registerFromEmail:
+    post:
+      tags:
+      - "user"
+      summary: "Create a new user from an email address"
+      description: ""
+      operationId: "registerFromEmail"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "An object containing the email address used for registration"
+        schema:
+          type: "object"
+          required:
+          - "email"
+          properties:
+            email:
+              type: "string"
+              format: "email"
+              example: "somebody@example.com"
+      responses:
+        "200":
+          description: "An account has been created and a verificaiton link has been sent through the email address"
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        "400":
+          description: "The request has been malformed"
+        "422":
+          description: "The email address cannot be used to create an account"
+          schema:
+            type: "string"
+            description: "Reason of failure"
+            enum:
+            - "The email is in-use"
+            - "The email address does look correct"
+            - "Account creation failed due to some unspecified reason"
+  /user/checkUsername:
+    get:
+      tags:
+      - "user"
+      summary: "Check whether a username is in-use"
+      description: ""
+      operationId: "checkUsername"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "username"
+        required: true
+        description: "A username to be checked"
+        type: "string"
+        pattern: "^[A-Za-z][A-Za-z0-9]{5,29}$"
+      responses:
+        "200":
+          description: "Result on whether username is available"
+          schema:
+            type: "object"
+            required:
+            - "availability"
+            properties:
+              availability:
+                type: "boolean"
+                example: false
+              message:
+                type: "string"
+                enum:
+                - "The username is in-use"
+                - "The username is too short"
+                - "The username is too long"
+                - "The username contains non-alphanumeric characters"
+                - "The username cannot be used"
+  /user/verifyEmail:
+    post:
+      tags:
+      - "user"
+      summary: "Verify the email address used to create the account and initialize user"
+      description: ""
+      operationId: "verifyEmail"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "An object containing the email address, token, and the new username and password needed for the initialization process"
+        schema:
+          type: "object"
+          required:
+          - "email"
+          - "token"
+          - "newUsername"
+          - "newPassword"
+          properties:
+            email:
+              type: "string"
+              format: "email"
+              example: "somebody@example.com"
+            token:
+              type: "string"
+              description: "A 16 byte authentication token encoded in base16 representation"
+              example: "0123456789abcdef0123456789abcdef"
+            newUsername:
+              type: "string"
+              example: "DebraAbraca03"
+              pattern: "^[A-Za-z][0-9A-Za-z]{5,29}$"
+            newPassword:
+              type: "string"
+              example: "BadPa$$w0rd"
+      responses:
+        "200":
+          description: "Email has been verified and the account has been initialized"
+        "400":
+          description: "The request has been malformed"
+        "401":
+          description: "Authentication failed"
+          schema:
+            type: "string"
+            description: "Reason of failure"
+            enum:
+            - "The email address does not have an associated account"
+            - "The verification link has expired"
+            - "Authentication token is invalid"
+        "422":
+          description: "Account cannot be initialized"
+          schema:
+            type: "string"
+            description: "Reason of failure"
+            enum:
+            - "The username is in-use"
+            - "The username is too short"
+            - "The username is too long"
+            - "The username contains non-alphanumeric characters"
+            - "The username cannot be used"
+            - "The password is too simple"
+            - "The password is frequently used and is susceptible to brute force attacks"
+
+  /user/updatePassword:
+    post:
+      tags:
+      - "user"
+      summary: "Update user's password using the current password"
+      description: ""
+      operationId: "updatePassword"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "An object containing the old and new passwords"
+        schema:
+          type: "object"
+          required:
+          - "oldPassword"
+          - "newPassword"
+          properties:
+            oldPassword:
+              type: "string"
+              example: "BadPa$$w0rd"
+            newPassword:
+              type: "string"
+              example: "CorrectHorseBatteryStaple"
+      responses:
+        "200":
+          description: "Password has been updated"
+        "401":
+          description: "Old password does not match with our records"
+        "422":
+          description: "New password does not meet requirements"
+          schema:
+            type: "string"
+            description: "Reason of failure"
+            enum:
+            - "The password is too simple"
+            - "The password is frequently used and is susceptible to brute force attacks"
+  /user/requestPasswordReset:
+    post:
+      tags:
+      - "user"
+      summary: "Request a password reset email"
+      description: ""
+      operationId: "requestPasswordReset"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "An object containing the email address of the account"
+        schema:
+          type: "object"
+          required:
+          - "email"
+          properties:
+            email:
+              type: "string"
+              format: "email"
+              example: "somebody@example.com"
+      responses:
+        "200":
+          description: "A password reset email has been sent to the email associated with the account, if it exists."
+  /user/resetPassword:
+    post:
+      tags:
+      - "user"
+      summary: "Use a token to reset the password"
+      description: ""
+      operationId: "resetPassword"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "An object containing the email address and temporary token of the account"
+        schema:
+          type: "object"
+          required:
+          - "email"
+          - "token"
+          properties:
+            email:
+              type: "string"
+              format: "email"
+              example: "somebody@example.com"
+            token:
+              type: "string"
+              description: "A 16 byte authentication token encoded in base16 representation"
+              example: "0123456789abcdef0123456789abcdef"
+      responses:
+        "200":
+          description: "Password has been reset"
+        "401":
+          description: "Authentication failed"
+          schema:
+            type: "string"
+            description: "Reason of failure"
+            enum:
+            - "The email address does not have an associated account"
+            - "The verification link has expired"
+            - "Authentication token is invalid"
+        "422":
+          description: "New password does not meet requirements"
+          schema:
+            type: "string"
+            description: "Reason of failure"
+            enum:
+            - "The password is too simple"
+            - "The password is frequently used and is susceptible to brute force attacks"
+  /user/userProfile:
+    get:
+      tags:
+      - "user"
+      summary: "Get the current values of user profile"
+      description: ""
+      operationId: "getProfile"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          schema:
+            $ref: "#/definitions/UserProfile"
+          description: "Successfully retrieved the user profile"
+        "401":
+          description: "User is not authenticated"
+    post:
+      tags:
+      - "user"
+      summary: "Update user profile"
+      description: ""
+      operationId: "updateProfile"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "An object containing the user profile fields to be updated"
+        schema:
+          $ref: "#/definitions/UserProfile"
+      responses:
+        "200":
+          description: "User profile has been successfully updated"
+        "400":
+          description: "The request has been malformed"
+        "422":
+          description: "User profile cannot be updated as requested"
+          schema:
+            type: "string"
+            description: "Reason of failure"
+            enum:
+            - "The first name is too long"
+            - "The last name is too long"
+            - "The format of the birth date cannot be recognized"
+            - "The format of the time zone string cannot be recognized"
+            - "The format of the locale string cannot be recognized"
+            - "The selected privacy scope option is not allowed"
+  /mile:
+    post:
+      tags:
+      - "record"
+      summary: "Create a mile"
+      description: ""
+      operationId: "createMile"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        schema:
+          $ref: "#/definitions/VersionedRecord"
+      responses:
+        "200":
+          description: "Resource successfully created"
+        "401":
+          description: "User not authorized to create a resource"
+  /mile/{mileId}:
+    get:
+      tags:
+      - "record"
+      summary: "Fetch a mile"
+      description: ""
+      operationId: "getMileById"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "mileId"
+        description: "Primary key of the mile object referenced"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Resource successfully retrieved"
+          schema:
+            $ref: "#/definitions/VersionedRecord"
+        "403":
+          description: "User is unable to access the resource due to the resource's privacy setting"
+        "404":
+          description: "The requested resource does not exist"
+    post:
+      tags:
+      - "record"
+      summary: "Update a mile"
+      description: ""
+      operationId: "updateMileById"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "mileId"
+        description: "Primary key of the mile object referenced"
+        required: true
+        type: "integer"
+      - in: "body"
+        name: "body"
+        schema:
+          $ref: "#/definitions/VersionedRecord"
+      responses:
+        "200":
+          description: "Resource successfully updated"
+        "403":
+          description: "Resource can only be edited by owner"
+        "404":
+          description: "The requested resource does not exist"
+    delete:
+      tags:
+      - "record"
+      summary: "Delete a mile"
+      description: ""
+      operationId: "deleteMileById"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "mileId"
+        description: "Primary key of the mile object referenced"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Resource successfully deleted"
+        "403":
+          description: "Resource can only be deleted by owner"
+        "404":
+          description: "The requested resource does not exist"
+  /porn:
+    get:
+      summary: "Attempt to access a pornographic resource from this server"
+      responses:
+        "418":
+          description: ":("
+          schema:
+            type: "string"
+            enum:
+            - "Sir this is an Arby's"
+definitions:
+  UserProfile:
+    type: "object"
+    properties:
+      firstName:
+        type: "string"
+        example: "Debra"
+      lastName:
+        type: "string"
+        example: "Abraca"
+      birthDate:
+        type: "string"
+        format: "date"
+        example: "2000-01-01"
+      timeZone:
+        type: "string"
+        format: "IANA"
+        example: "America/New_York"
+      locale:
+        type: "string"
+        format: "LDML"
+        example: "en-US"
+      privacyScope:
+        type: "string"
+        enum:
+        - "public"
+        - "friends"
+        - "private"
+        example: "friends"
+    xml:
+      name: "UserProfile"
+  VersionedRecord:
+    type: "object"
+    required:
+    - "displayName"
+    - "version"
+    - "createdAt"
+    - "title"
+    - "description"
+    - "verifiedContemporaneousRecord"
+    properties:
+      displayName:
+        type: "string"
+        example: "Jogging"
+      version:
+        type: "integer"
+        minimum: 1
+        example: 1
+      createdAt:
+        type: "string"
+        format: "date-time"
+        example: "2020-20-20T20:20:20Z"
+      title:
+        type: "string"
+        example: "Running along trail"
+      description:
+        type: "string"
+        example: "Running a stretch of 1 mile along the Minutemen bike trail."
+      verifiedContemporaneousRecord:
+        type: "boolean"
+        example: true
+    xml:
+      name: "VersionedRecord"
+  SuccessResponse:
+    description: "Request has been processed successfully"
+    type: "object"
+    required:
+    - "status"
+    - "data"
+    properties:
+      status:
+        type: "string"
+        enum:
+        - "success"
+      data:
+        type: "object"
+        description: "An object carrying a payload of data"
+  FailureResponse:
+    description: "Request failed due to a problem with the request"
+    type: "object"
+    required:
+    - "status"
+    - "data"
+    properties:
+      status:
+        type: "string"
+        enum:
+        - "failure"
+      data:
+        type: "object"
+        required:
+        - "reasons"
+        properties:
+          reasons:
+            type: "array"
+            description: "A list of reasons why the request failed"
+            items:
+              type: "string"
+  ErrorResponse:
+    description: "Request failed due to a problem with the server"
+    type: "object"
+    required:
+    - "status"
+    - "message"
+    properties:
+      status:
+        type: "string"
+        enum:
+        - "error"
+      message:
+        type: "string"
+        description: "A message indicating the problem experienced by the server"
+# externalDocs:
+#   description: "Find out more about Swagger"
+#   url: "http://swagger.io"
