@@ -14,9 +14,6 @@ basePath: "/v1"
 tags:
 - name: "user"
   description: "Operations concerning individual users"
-#   externalDocs:
-#     description: "Find out more"
-#     url: "http://swagger.io"
 - name: "record"
   description: "Operations accessing individual records"
 schemes:
@@ -52,17 +49,38 @@ paths:
           description: "An account has been created and a verificaiton link has been sent through the email address"
           schema:
             $ref: "#/definitions/SuccessResponse"
-        "400":
-          description: "The request has been malformed"
         "422":
           description: "The email address cannot be used to create an account"
           schema:
-            type: "string"
-            description: "Reason of failure"
-            enum:
-            - "The email is in-use"
-            - "The email address does look correct"
-            - "Account creation failed due to some unspecified reason"
+            $ref: "#/definitions/FailureResponse"
+        "400":
+          description: "The request has been malformed"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "408":
+          description: "Request has timed out"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "413":
+          description: "The request payload is too large"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "429":
+          description: "User have made too many requests"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "431":
+          description: "The request header is too large"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "500":
+          description: "The server has encountered an internal error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "503":
+          description: "The server is temporarily unavailable"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /user/checkUsername:
     get:
       tags:
@@ -85,21 +103,35 @@ paths:
         "200":
           description: "Result on whether username is available"
           schema:
-            type: "object"
-            required:
-            - "availability"
-            properties:
-              availability:
-                type: "boolean"
-                example: false
-              message:
-                type: "string"
-                enum:
-                - "The username is in-use"
-                - "The username is too short"
-                - "The username is too long"
-                - "The username contains non-alphanumeric characters"
-                - "The username cannot be used"
+            $ref: "#/definitions/SuccessResponse"
+        "400":
+          description: "The request has been malformed"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "408":
+          description: "Request has timed out"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "413":
+          description: "The request payload is too large"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "429":
+          description: "User have made too many requests"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "431":
+          description: "The request header is too large"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "500":
+          description: "The server has encountered an internal error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "503":
+          description: "The server is temporarily unavailable"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /user/verifyEmail:
     post:
       tags:
@@ -141,31 +173,36 @@ paths:
       responses:
         "200":
           description: "Email has been verified and the account has been initialized"
+          schema:
+            $ref: "#/definitions/SuccessResponse"
         "400":
           description: "The request has been malformed"
-        "401":
-          description: "Authentication failed"
           schema:
-            type: "string"
-            description: "Reason of failure"
-            enum:
-            - "The email address does not have an associated account"
-            - "The verification link has expired"
-            - "Authentication token is invalid"
-        "422":
-          description: "Account cannot be initialized"
+            $ref: "#/definitions/FailureResponse"
+        "408":
+          description: "Request has timed out"
           schema:
-            type: "string"
-            description: "Reason of failure"
-            enum:
-            - "The username is in-use"
-            - "The username is too short"
-            - "The username is too long"
-            - "The username contains non-alphanumeric characters"
-            - "The username cannot be used"
-            - "The password is too simple"
-            - "The password is frequently used and is susceptible to brute force attacks"
-
+            $ref: "#/definitions/FailureResponse"
+        "413":
+          description: "The request payload is too large"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "429":
+          description: "User have made too many requests"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "431":
+          description: "The request header is too large"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "500":
+          description: "The server has encountered an internal error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "503":
+          description: "The server is temporarily unavailable"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /user/updatePassword:
     post:
       tags:
@@ -196,16 +233,48 @@ paths:
       responses:
         "200":
           description: "Password has been updated"
-        "401":
-          description: "Old password does not match with our records"
-        "422":
-          description: "New password does not meet requirements"
           schema:
-            type: "string"
-            description: "Reason of failure"
-            enum:
-            - "The password is too simple"
-            - "The password is frequently used and is susceptible to brute force attacks"
+            $ref: "#/definitions/SuccessResponse"
+        "422":
+          description: "Password cannot be updated as requested"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "400":
+          description: "The request has been malformed"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "401":
+          description: "User must log in to perform this action"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "403":
+          description: "User is not authorized to perform this action"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "408":
+          description: "Request has timed out"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "413":
+          description: "The request payload is too large"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "429":
+          description: "User have made too many requests"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "431":
+          description: "The request header is too large"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "500":
+          description: "The server has encountered an internal error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "503":
+          description: "The server is temporarily unavailable"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /user/requestPasswordReset:
     post:
       tags:
@@ -233,6 +302,40 @@ paths:
       responses:
         "200":
           description: "A password reset email has been sent to the email associated with the account, if it exists."
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        "400":
+          description: "The request has been malformed"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "422":
+          description: "Account cannot be initialized due to problems within submitted form"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "408":
+          description: "Request has timed out"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "413":
+          description: "The request payload is too large"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "429":
+          description: "User have made too many requests"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "431":
+          description: "The request header is too large"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "500":
+          description: "The server has encountered an internal error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "503":
+          description: "The server is temporarily unavailable"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /user/resetPassword:
     post:
       tags:
@@ -265,23 +368,40 @@ paths:
       responses:
         "200":
           description: "Password has been reset"
-        "401":
-          description: "Authentication failed"
           schema:
-            type: "string"
-            description: "Reason of failure"
-            enum:
-            - "The email address does not have an associated account"
-            - "The verification link has expired"
-            - "Authentication token is invalid"
+            $ref: "#/definitions/SuccessResponse"
         "422":
-          description: "New password does not meet requirements"
+          description: "Password cannot be reset as requested"
           schema:
-            type: "string"
-            description: "Reason of failure"
-            enum:
-            - "The password is too simple"
-            - "The password is frequently used and is susceptible to brute force attacks"
+            $ref: "#/definitions/FailureResponse"
+        "400":
+          description: "The request has been malformed"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "408":
+          description: "Request has timed out"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "413":
+          description: "The request payload is too large"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "429":
+          description: "User have made too many requests"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "431":
+          description: "The request header is too large"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "500":
+          description: "The server has encountered an internal error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "503":
+          description: "The server is temporarily unavailable"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /user/userProfile:
     get:
       tags:
@@ -295,11 +415,45 @@ paths:
       - "application/json"
       responses:
         "200":
-          schema:
-            $ref: "#/definitions/UserProfile"
           description: "Successfully retrieved the user profile"
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        "400":
+          description: "The request has been malformed"
+          schema:
+            $ref: "#/definitions/FailureResponse"
         "401":
-          description: "User is not authenticated"
+          description: "User must log in to perform this action"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "403":
+          description: "User is not authorized to perform this action"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "408":
+          description: "Request has timed out"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "413":
+          description: "The request payload is too large"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "429":
+          description: "User have made too many requests"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "431":
+          description: "The request header is too large"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "500":
+          description: "The server has encountered an internal error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "503":
+          description: "The server is temporarily unavailable"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
     post:
       tags:
       - "user"
@@ -319,20 +473,48 @@ paths:
       responses:
         "200":
           description: "User profile has been successfully updated"
-        "400":
-          description: "The request has been malformed"
+          schema:
+            $ref: "#/definitions/SuccessResponse"
         "422":
           description: "User profile cannot be updated as requested"
           schema:
-            type: "string"
-            description: "Reason of failure"
-            enum:
-            - "The first name is too long"
-            - "The last name is too long"
-            - "The format of the birth date cannot be recognized"
-            - "The format of the time zone string cannot be recognized"
-            - "The format of the locale string cannot be recognized"
-            - "The selected privacy scope option is not allowed"
+            $ref: "#/definitions/FailureResponse"
+        "400":
+          description: "The request has been malformed"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "401":
+          description: "User must log in to perform this action"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "403":
+          description: "User is not authorized to perform this action"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "408":
+          description: "Request has timed out"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "413":
+          description: "The request payload is too large"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "429":
+          description: "User have made too many requests"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "431":
+          description: "The request header is too large"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "500":
+          description: "The server has encountered an internal error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "503":
+          description: "The server is temporarily unavailable"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /mile:
     post:
       tags:
@@ -350,10 +532,50 @@ paths:
         schema:
           $ref: "#/definitions/VersionedRecord"
       responses:
-        "200":
+        "201":
           description: "Resource successfully created"
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        "422":
+          description: "Resource cannot be created as requested"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "400":
+          description: "The request has been malformed"
+          schema:
+            $ref: "#/definitions/FailureResponse"
         "401":
-          description: "User not authorized to create a resource"
+          description: "User must log in to perform this action"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "403":
+          description: "User is not authorized to perform this action"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "408":
+          description: "Request has timed out"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "413":
+          description: "The request payload is too large"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "429":
+          description: "User have made too many requests"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "431":
+          description: "The request header is too large"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "500":
+          description: "The server has encountered an internal error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "503":
+          description: "The server is temporarily unavailable"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /mile/{mileId}:
     get:
       tags:
@@ -375,12 +597,44 @@ paths:
         "200":
           description: "Resource successfully retrieved"
           schema:
-            $ref: "#/definitions/VersionedRecord"
-        "403":
-          description: "User is unable to access the resource due to the resource's privacy setting"
+            $ref: "#/definitions/SuccessResponse"
         "404":
           description: "The requested resource does not exist"
-    post:
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "400":
+          description: "The request has been malformed"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "403":
+          description: "User is not authorized to perform this action"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "408":
+          description: "Request has timed out"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "413":
+          description: "The request payload is too large"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "429":
+          description: "User have made too many requests"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "431":
+          description: "The request header is too large"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "500":
+          description: "The server has encountered an internal error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "503":
+          description: "The server is temporarily unavailable"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    put:
       tags:
       - "record"
       summary: "Update a mile"
@@ -403,10 +657,52 @@ paths:
       responses:
         "200":
           description: "Resource successfully updated"
-        "403":
-          description: "Resource can only be edited by owner"
+          schema:
+            $ref: "#/definitions/SuccessResponse"
         "404":
           description: "The requested resource does not exist"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "422":
+          description: "The resource cannot be updated as requested"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "400":
+          description: "The request has been malformed"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "401":
+          description: "User must log in to perform this action"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "403":
+          description: "User is not authorized to perform this action"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "408":
+          description: "Request has timed out"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "413":
+          description: "The request payload is too large"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "429":
+          description: "User have made too many requests"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "431":
+          description: "The request header is too large"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "500":
+          description: "The server has encountered an internal error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "503":
+          description: "The server is temporarily unavailable"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
     delete:
       tags:
       - "record"
@@ -426,10 +722,48 @@ paths:
       responses:
         "200":
           description: "Resource successfully deleted"
-        "403":
-          description: "Resource can only be deleted by owner"
+          schema:
+            $ref: "#/definitions/SuccessResponse"
         "404":
           description: "The requested resource does not exist"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "400":
+          description: "The request has been malformed"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "401":
+          description: "User must log in to perform this action"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "403":
+          description: "User is not authorized to perform this action"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "408":
+          description: "Request has timed out"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "413":
+          description: "The request payload is too large"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "429":
+          description: "User have made too many requests"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "431":
+          description: "The request header is too large"
+          schema:
+            $ref: "#/definitions/FailureResponse"
+        "500":
+          description: "The server has encountered an internal error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "503":
+          description: "The server is temporarily unavailable"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /porn:
     get:
       summary: "Attempt to access a pornographic resource from this server"
@@ -437,9 +771,7 @@ paths:
         "418":
           description: ":("
           schema:
-            type: "string"
-            enum:
-            - "Sir this is an Arby's"
+            $ref: "#/definitions/FailureResponse"
 definitions:
   UserProfile:
     type: "object"
@@ -537,7 +869,18 @@ definitions:
             type: "array"
             description: "A list of reasons why the request failed"
             items:
-              type: "string"
+              type: "object"
+              required:
+              - "scopeName"
+              - "errorCode"
+              - "errorMessage"
+              properties:
+                scopeName:
+                  type: "string"
+                errorCode:
+                  type: "string"
+                errorMessage:
+                  type: "string"
   ErrorResponse:
     description: "Request failed due to a problem with the server"
     type: "object"
@@ -552,6 +895,6 @@ definitions:
       message:
         type: "string"
         description: "A message indicating the problem experienced by the server"
-# externalDocs:
-#   description: "Find out more about Swagger"
-#   url: "http://swagger.io"
+externalDocs:
+  description: "Error responses"
+  url: "https://github.com/mumingpo/perman-api-specification/blob/main/v1/errorResponses.js"
