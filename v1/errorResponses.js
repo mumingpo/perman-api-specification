@@ -4,7 +4,7 @@ const errors = {
 		type: 'Bad Request',
 		scopes: {
 			misc: [
-				['BadRequest', 'The server cannot understand the request.']
+				['BadRequest', 'The server cannot understand the request.'],
 			],
 		},
 	},
@@ -110,7 +110,6 @@ const errors = {
 		},
 	},
 };
-
 
 // convert into keyed object
 const errorResponses = {};
