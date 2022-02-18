@@ -37,7 +37,7 @@ paths:
                   type: string
                   format: email
                   example: somebody@example.com
-        required: false
+        required: true
       responses:
         200:
           description: An account has been created and a verificaiton link has been
@@ -193,7 +193,7 @@ paths:
                 newPassword:
                   type: string
                   example: BadPa$$w0rd
-        required: false
+        required: true
       responses:
         200:
           description: Email has been verified and the account has been initialized
@@ -266,7 +266,7 @@ paths:
                 newPassword:
                   type: string
                   example: CorrectHorseBatteryStaple
-        required: false
+        required: true
       responses:
         200:
           description: Password has been updated
@@ -354,7 +354,7 @@ paths:
                   type: string
                   format: email
                   example: somebody@example.com
-        required: false
+        required: true
       responses:
         200:
           description: A password reset email has been sent to the email associated
@@ -438,7 +438,7 @@ paths:
                   type: string
                   description: A 16 byte authentication token encoded in base16 representation
                   example: 0123456789abcdef0123456789abcdef
-        required: false
+        required: true
       responses:
         200:
           description: Password has been reset
@@ -573,7 +573,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/UserProfile'
-        required: false
+        required: true
       responses:
         200:
           description: User profile has been successfully updated
@@ -653,7 +653,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/VersionedRecord'
-        required: false
+        required: true
       responses:
         201:
           description: Resource successfully created
@@ -813,7 +813,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/VersionedRecord'
-        required: false
+        required: true
       responses:
         200:
           description: Resource successfully updated
@@ -1087,6 +1087,9 @@ components:
                   errorMessage:
                     type: string
       description: Request failed due to a problem with the request
+      externalDocs:
+        description: Error responses
+        url: https://github.com/mumingpo/perman-api-specification/blob/main/v1/errorResponses.js
     ErrorResponse:
       required:
       - message
@@ -1101,3 +1104,6 @@ components:
           type: string
           description: A message indicating the problem experienced by the server
       description: Request failed due to a problem with the server
+      externalDocs:
+        description: Error responses
+        url: https://github.com/mumingpo/perman-api-specification/blob/main/v1/errorResponses.js
