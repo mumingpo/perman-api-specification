@@ -1,5 +1,5 @@
-// define errors
-const errors = {
+// define failures
+const failures = {
 	400: {
 		type: 'Bad Request',
 		scopes: {
@@ -93,50 +93,51 @@ const errors = {
 			],
 		},
 	},
-	500: {
-		type: 'Internal Server Error',
-		scopes: {
-			misc: [
-				['General', 'An unspecified error has occured.'],
-			],
-		},
-	},
-	503: {
-		type: 'Service Unavailable',
-		scopes: {
-			misc: [
-				['ServiceUnavailable', 'The server is unavailable to handle requests at this time. Please try again later.'],
-			],
-		},
-	},
+	// errors should not be in failureResponses
+	// 500: {
+	// 	type: 'Internal Server Error',
+	// 	scopes: {
+	// 		misc: [
+	// 			['General', 'An unspecified error has occured.'],
+	// 		],
+	// 	},
+	// },
+	// 503: {
+	// 	type: 'Service Unavailable',
+	// 	scopes: {
+	// 		misc: [
+	// 			['ServiceUnavailable', 'The server is unavailable to handle requests at this time. Please try again later.'],
+	// 		],
+	// 	},
+	// },
 };
 
 // convert into keyed object
-const errorResponses = {};
+const failureResponses = {};
 
-for (const htmlStatus of Object.entries(errors)) {
+for (const htmlStatus of Object.entries(failures)) {
 	const htmlStatusCode = htmlStatus[0];
 	const htmlStatusType = htmlStatus[1].type;
-	const htmlStatusErrors = htmlStatus[1].scopes;
-	errorResponses[htmlStatusCode] = {};
+	const htmlStatusFailures = htmlStatus[1].scopes;
+	failureResponses[htmlStatusCode] = {};
 
-	for (const scope of Object.entries(htmlStatusErrors)) {
+	for (const scope of Object.entries(htmlStatusFailures)) {
 		const scopeName = scope[0];
 		const scopeEntries = scope[1];
-		errorResponses[htmlStatusCode][scopeName] = {};
+		failureResponses[htmlStatusCode][scopeName] = {};
 
-		for (const errorEntry of scopeEntries) {
-			const errorCode = errorEntry[0];
-			const errorMessage = errorEntry[1];
+		for (const failureEntry of scopeEntries) {
+			const failureCode = failureEntry[0];
+			const failureMessage = failureEntry[1];
 
-			errorResponses[htmlStatusCode][scopeName][errorCode] = {
+			failureResponses[htmlStatusCode][scopeName][failureCode] = {
 				htmlStatusCode,
 				scopeName,
-				errorCode,
-				errorMessage,
+				failureCode,
+				failureMessage,
 			};
 		}
 	}
 }
 
-export default errorResponses;
+export default failureResponses;
