@@ -5,6 +5,9 @@ info:
   termsOfService: https://www.youtube.com/watch?v=dQw4w9WgXcQ
   contact:
     email: mumingpo@gmail.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
   version: "1.0"
 externalDocs:
   description: Error responses
@@ -46,54 +49,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
-        400:
-          description: The request has been malformed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        408:
-          description: Request has timed out
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        413:
-          description: The request payload is too large
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
         422:
           description: The email address cannot be used to create an account
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/FailureResponse'
+        400:
+          $ref: "#/components/responses/400"
+        408:
+          $ref: "#/components/responses/408"
+        413:
+          $ref: "#/components/responses/413"
         429:
-          description: User have made too many requests
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/429"
         431:
-          description: The request header is too large
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/431"
         500:
-          description: The server has encountered an internal error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: "#/components/responses/500"
         503:
-          description: The server is temporarily unavailable
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: "#/components/responses/503"
       x-codegen-request-body-name: body
   /user/checkUsername:
     get:
@@ -117,47 +92,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
         400:
-          description: The request has been malformed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/400"
         408:
-          description: Request has timed out
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/408"
         413:
-          description: The request payload is too large
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/413"
         429:
-          description: User have made too many requests
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/429"
         431:
-          description: The request header is too large
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/431"
         500:
-          description: The server has encountered an internal error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: "#/components/responses/500"
         503:
-          description: The server is temporarily unavailable
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: "#/components/responses/503"
   /user/verifyEmail:
     post:
       tags:
@@ -202,47 +149,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
         400:
-          description: The request has been malformed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/400"
         408:
-          description: Request has timed out
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/408"
         413:
-          description: The request payload is too large
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/413"
         429:
-          description: User have made too many requests
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/429"
         431:
-          description: The request header is too large
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/431"
         500:
-          description: The server has encountered an internal error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: "#/components/responses/500"
         503:
-          description: The server is temporarily unavailable
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: "#/components/responses/503"
       x-codegen-request-body-name: body
   /user/updatePassword:
     post:
@@ -274,66 +193,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
-        400:
-          description: The request has been malformed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        401:
-          description: User must log in to perform this action
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        403:
-          description: User is not authorized to perform this action
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        408:
-          description: Request has timed out
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        413:
-          description: The request payload is too large
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
         422:
           description: Password cannot be updated as requested
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/FailureResponse'
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        403:
+          $ref: "#/components/responses/403"
+        408:
+          $ref: "#/components/responses/408"
+        413:
+          $ref: "#/components/responses/413"
         429:
-          description: User have made too many requests
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/429"
         431:
-          description: The request header is too large
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/431"
         500:
-          description: The server has encountered an internal error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: "#/components/responses/500"
         503:
-          description: The server is temporarily unavailable
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: "#/components/responses/503"
       x-codegen-request-body-name: body
   /user/requestPasswordReset:
     post:
@@ -363,24 +246,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
-        400:
-          description: The request has been malformed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        408:
-          description: Request has timed out
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        413:
-          description: The request payload is too large
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
         422:
           description: Account cannot be initialized due to problems within submitted
             form
@@ -388,30 +253,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FailureResponse'
+        400:
+          $ref: "#/components/responses/400"
+        408:
+          $ref: "#/components/responses/408"
+        413:
+          $ref: "#/components/responses/413"
         429:
-          description: User have made too many requests
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/429"
         431:
-          description: The request header is too large
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/431"
         500:
-          description: The server has encountered an internal error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: "#/components/responses/500"
         503:
-          description: The server is temporarily unavailable
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: "#/components/responses/503"
       x-codegen-request-body-name: body
   /user/resetPassword:
     post:
@@ -446,54 +301,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
-        400:
-          description: The request has been malformed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        408:
-          description: Request has timed out
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        413:
-          description: The request payload is too large
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
         422:
           description: Password cannot be reset as requested
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/FailureResponse'
+        400:
+          $ref: "#/components/responses/400"
+        408:
+          $ref: "#/components/responses/408"
+        413:
+          $ref: "#/components/responses/413"
         429:
-          description: User have made too many requests
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/429"
         431:
-          description: The request header is too large
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/431"
         500:
-          description: The server has encountered an internal error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: "#/components/responses/500"
         503:
-          description: The server is temporarily unavailable
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: "#/components/responses/503"
       x-codegen-request-body-name: body
   /user/userProfile:
     get:
@@ -509,59 +336,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
         400:
-          description: The request has been malformed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/400"
         401:
-          description: User must log in to perform this action
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/401"
         403:
-          description: User is not authorized to perform this action
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/403"
         408:
-          description: Request has timed out
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/408"
         413:
-          description: The request payload is too large
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/413"
         429:
-          description: User have made too many requests
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/429"
         431:
-          description: The request header is too large
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/431"
         500:
-          description: The server has encountered an internal error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: "#/components/responses/500"
         503:
-          description: The server is temporarily unavailable
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: "#/components/responses/503"
     post:
       tags:
       - user
@@ -581,66 +372,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
-        400:
-          description: The request has been malformed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        401:
-          description: User must log in to perform this action
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        403:
-          description: User is not authorized to perform this action
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        408:
-          description: Request has timed out
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        413:
-          description: The request payload is too large
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
         422:
           description: User profile cannot be updated as requested
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/FailureResponse'
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        403:
+          $ref: "#/components/responses/403"
+        408:
+          $ref: "#/components/responses/408"
+        413:
+          $ref: "#/components/responses/413"
         429:
-          description: User have made too many requests
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/429"
         431:
-          description: The request header is too large
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/431"
         500:
-          description: The server has encountered an internal error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: "#/components/responses/500"
         503:
-          description: The server is temporarily unavailable
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: "#/components/responses/503"
       x-codegen-request-body-name: body
   /mile:
     post:
@@ -661,66 +416,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
-        400:
-          description: The request has been malformed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        401:
-          description: User must log in to perform this action
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        403:
-          description: User is not authorized to perform this action
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        408:
-          description: Request has timed out
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        413:
-          description: The request payload is too large
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
         422:
           description: Resource cannot be created as requested
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/FailureResponse'
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        403:
+          $ref: "#/components/responses/403"
+        404:
+          $ref: "#/components/responses/404"
+        408:
+          $ref: "#/components/responses/408"
+        413:
+          $ref: "#/components/responses/413"
         429:
-          description: User have made too many requests
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/429"
         431:
-          description: The request header is too large
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/431"
         500:
-          description: The server has encountered an internal error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: "#/components/responses/500"
         503:
-          description: The server is temporarily unavailable
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: "#/components/responses/503"
       x-codegen-request-body-name: body
   /mile/{mileId}:
     get:
@@ -743,59 +464,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
         400:
-          description: The request has been malformed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/400"
         403:
-          description: User is not authorized to perform this action
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/403"
         404:
-          description: The requested resource does not exist
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/404"
         408:
-          description: Request has timed out
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/408"
         413:
-          description: The request payload is too large
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/413"
         429:
-          description: User have made too many requests
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/429"
         431:
-          description: The request header is too large
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/431"
         500:
-          description: The server has encountered an internal error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: "#/components/responses/500"
         503:
-          description: The server is temporarily unavailable
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: "#/components/responses/503"
     put:
       tags:
       - record
@@ -821,72 +506,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
-        400:
-          description: The request has been malformed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        401:
-          description: User must log in to perform this action
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        403:
-          description: User is not authorized to perform this action
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        404:
-          description: The requested resource does not exist
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        408:
-          description: Request has timed out
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        413:
-          description: The request payload is too large
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
         422:
           description: The resource cannot be updated as requested
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/FailureResponse'
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        403:
+          $ref: "#/components/responses/403"
+        404:
+          $ref: "#/components/responses/404"
+        408:
+          $ref: "#/components/responses/408"
+        413:
+          $ref: "#/components/responses/413"
         429:
-          description: User have made too many requests
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/429"
         431:
-          description: The request header is too large
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/431"
         500:
-          description: The server has encountered an internal error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: "#/components/responses/500"
         503:
-          description: The server is temporarily unavailable
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: "#/components/responses/503"
       x-codegen-request-body-name: body
     delete:
       tags:
@@ -908,65 +553,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
         400:
-          description: The request has been malformed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/400"
         401:
-          description: User must log in to perform this action
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/401"
         403:
-          description: User is not authorized to perform this action
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/403"
         404:
-          description: The requested resource does not exist
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/404"
         408:
-          description: Request has timed out
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/408"
         413:
-          description: The request payload is too large
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/413"
         429:
-          description: User have made too many requests
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/429"
         431:
-          description: The request header is too large
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
+          $ref: "#/components/responses/431"
         500:
-          description: The server has encountered an internal error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: "#/components/responses/500"
         503:
-          description: The server is temporarily unavailable
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: "#/components/responses/503"
   /porn:
     get:
       summary: Attempt to access a pornographic resource from this server
@@ -974,7 +579,7 @@ paths:
         418:
           description: :(
           content:
-            '*/*':
+            'application/json':
               schema:
                 $ref: '#/components/schemas/FailureResponse'
 components:
@@ -1075,21 +680,21 @@ components:
               description: A list of reasons why the request failed
               items:
                 required:
-                - errorCode
-                - errorMessage
+                - failureCode
+                - failureMessage
                 - scopeName
                 type: object
                 properties:
                   scopeName:
                     type: string
-                  errorCode:
+                  failureCode:
                     type: string
-                  errorMessage:
+                  failureMessage:
                     type: string
       description: Request failed due to a problem with the request
       externalDocs:
-        description: Error responses
-        url: https://github.com/mumingpo/perman-api-specification/blob/main/v1/errorResponses.js
+        description: Failure responses
+        url: https://github.com/mumingpo/perman-api-specification/blob/main/v1/failureResponses.js
     ErrorResponse:
       required:
       - message
@@ -1104,6 +709,64 @@ components:
           type: string
           description: A message indicating the problem experienced by the server
       description: Request failed due to a problem with the server
-      externalDocs:
-        description: Error responses
-        url: https://github.com/mumingpo/perman-api-specification/blob/main/v1/errorResponses.js
+  responses:
+    '400':
+      description: The request has been malformed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FailureResponse'
+    '401':
+      description: User must log in to perform this action
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FailureResponse'
+    '403':
+      description: User is not authorized to perform this action
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FailureResponse'
+    '404':
+      description: The requested resource does not exist
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FailureResponse'
+    '408':
+      description: Request has timed out
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FailureResponse'
+    '413':
+      description: The request payload is too large
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FailureResponse'
+    '429':
+      description: User have made too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FailureResponse'
+    '431':
+      description: The request header is too large
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FailureResponse'
+    '500':
+      description: The server has encountered an internal error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    '503':
+      description: The server is temporarily unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
