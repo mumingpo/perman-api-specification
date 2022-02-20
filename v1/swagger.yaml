@@ -18,8 +18,12 @@ servers:
 tags:
 - name: user
   description: Operations concerning individual users
+- name: trackItem
+  description: Operations accessing individual track items
 - name: record
   description: Operations accessing individual records
+- name: misc
+  description: Miscellaneous operations
 paths:
   /user/registerFromEmail:
     post:
@@ -397,6 +401,360 @@ paths:
         503:
           $ref: "#/components/responses/503"
       x-codegen-request-body-name: body
+
+  /trackItem:
+    post:
+      tags:
+      - trackItem
+      summary: Create a track item
+      operationId: createTrackItem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrackItem'
+        required: true
+      responses:
+        201:
+          description: Resource successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        422:
+          description: Resource cannot be created as requested
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailureResponse'
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        403:
+          $ref: "#/components/responses/403"
+        404:
+          $ref: "#/components/responses/404"
+        408:
+          $ref: "#/components/responses/408"
+        413:
+          $ref: "#/components/responses/413"
+        429:
+          $ref: "#/components/responses/429"
+        431:
+          $ref: "#/components/responses/431"
+        500:
+          $ref: "#/components/responses/500"
+        503:
+          $ref: "#/components/responses/503"
+      x-codegen-request-body-name: body
+  /trackItem/{trackItemId}:
+    get:
+      tags:
+      - trackItem
+      summary: Fetch a track item
+      operationId: getTrackItemById
+      parameters:
+      - name: trackItemId
+        in: path
+        description: Primary key of the step object referenced
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: Resource successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        400:
+          $ref: "#/components/responses/400"
+        403:
+          $ref: "#/components/responses/403"
+        404:
+          $ref: "#/components/responses/404"
+        408:
+          $ref: "#/components/responses/408"
+        413:
+          $ref: "#/components/responses/413"
+        429:
+          $ref: "#/components/responses/429"
+        431:
+          $ref: "#/components/responses/431"
+        500:
+          $ref: "#/components/responses/500"
+        503:
+          $ref: "#/components/responses/503"
+    put:
+      tags:
+      - trackItem
+      summary: Update a track item
+      operationId: updateTrackItemById
+      parameters:
+      - name: trackItemId
+        in: path
+        description: Primary key of the track item object referenced
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrackItem'
+        required: true
+      responses:
+        200:
+          description: Resource successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        422:
+          description: The resource cannot be updated as requested
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailureResponse'
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        403:
+          $ref: "#/components/responses/403"
+        404:
+          $ref: "#/components/responses/404"
+        408:
+          $ref: "#/components/responses/408"
+        413:
+          $ref: "#/components/responses/413"
+        429:
+          $ref: "#/components/responses/429"
+        431:
+          $ref: "#/components/responses/431"
+        500:
+          $ref: "#/components/responses/500"
+        503:
+          $ref: "#/components/responses/503"
+      x-codegen-request-body-name: body
+    delete:
+      tags:
+      - trackItem
+      summary: Delete a track item
+      operationId: deleteTrackItemById
+      parameters:
+      - name: trackItemId
+        in: path
+        description: Primary key of the track item object referenced
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: Resource successfully deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        403:
+          $ref: "#/components/responses/403"
+        404:
+          $ref: "#/components/responses/404"
+        408:
+          $ref: "#/components/responses/408"
+        413:
+          $ref: "#/components/responses/413"
+        429:
+          $ref: "#/components/responses/429"
+        431:
+          $ref: "#/components/responses/431"
+        500:
+          $ref: "#/components/responses/500"
+        503:
+          $ref: "#/components/responses/503"
+
+
+
+  /step:
+    post:
+      tags:
+      - record
+      summary: Create a step
+      operationId: createStep
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VersionedRecord'
+        required: true
+      responses:
+        201:
+          description: Resource successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        422:
+          description: Resource cannot be created as requested
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailureResponse'
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        403:
+          $ref: "#/components/responses/403"
+        404:
+          $ref: "#/components/responses/404"
+        408:
+          $ref: "#/components/responses/408"
+        413:
+          $ref: "#/components/responses/413"
+        429:
+          $ref: "#/components/responses/429"
+        431:
+          $ref: "#/components/responses/431"
+        500:
+          $ref: "#/components/responses/500"
+        503:
+          $ref: "#/components/responses/503"
+      x-codegen-request-body-name: body
+  /step/{stepId}:
+    get:
+      tags:
+      - record
+      summary: Fetch a step
+      operationId: getStepById
+      parameters:
+      - name: stepId
+        in: path
+        description: Primary key of the step object referenced
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: Resource successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        400:
+          $ref: "#/components/responses/400"
+        403:
+          $ref: "#/components/responses/403"
+        404:
+          $ref: "#/components/responses/404"
+        408:
+          $ref: "#/components/responses/408"
+        413:
+          $ref: "#/components/responses/413"
+        429:
+          $ref: "#/components/responses/429"
+        431:
+          $ref: "#/components/responses/431"
+        500:
+          $ref: "#/components/responses/500"
+        503:
+          $ref: "#/components/responses/503"
+    put:
+      tags:
+      - record
+      summary: Update a step
+      operationId: updateStepById
+      parameters:
+      - name: stepId
+        in: path
+        description: Primary key of the step object referenced
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VersionedRecord'
+        required: true
+      responses:
+        200:
+          description: Resource successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        422:
+          description: The resource cannot be updated as requested
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailureResponse'
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        403:
+          $ref: "#/components/responses/403"
+        404:
+          $ref: "#/components/responses/404"
+        408:
+          $ref: "#/components/responses/408"
+        413:
+          $ref: "#/components/responses/413"
+        429:
+          $ref: "#/components/responses/429"
+        431:
+          $ref: "#/components/responses/431"
+        500:
+          $ref: "#/components/responses/500"
+        503:
+          $ref: "#/components/responses/503"
+      x-codegen-request-body-name: body
+    delete:
+      tags:
+      - record
+      summary: Delete a step
+      operationId: deleteStepById
+      parameters:
+      - name: stepId
+        in: path
+        description: Primary key of the step object referenced
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: Resource successfully deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        403:
+          $ref: "#/components/responses/403"
+        404:
+          $ref: "#/components/responses/404"
+        408:
+          $ref: "#/components/responses/408"
+        413:
+          $ref: "#/components/responses/413"
+        429:
+          $ref: "#/components/responses/429"
+        431:
+          $ref: "#/components/responses/431"
+        500:
+          $ref: "#/components/responses/500"
+        503:
+          $ref: "#/components/responses/503"
   /mile:
     post:
       tags:
@@ -572,8 +930,213 @@ paths:
           $ref: "#/components/responses/500"
         503:
           $ref: "#/components/responses/503"
+  /league:
+    post:
+      tags:
+      - record
+      summary: Create a league
+      operationId: createLeague
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VersionedRecord'
+        required: true
+      responses:
+        201:
+          description: Resource successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        422:
+          description: Resource cannot be created as requested
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailureResponse'
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        403:
+          $ref: "#/components/responses/403"
+        404:
+          $ref: "#/components/responses/404"
+        408:
+          $ref: "#/components/responses/408"
+        413:
+          $ref: "#/components/responses/413"
+        429:
+          $ref: "#/components/responses/429"
+        431:
+          $ref: "#/components/responses/431"
+        500:
+          $ref: "#/components/responses/500"
+        503:
+          $ref: "#/components/responses/503"
+      x-codegen-request-body-name: body
+  /league/{leagueId}:
+    get:
+      tags:
+      - record
+      summary: Fetch a league
+      operationId: getLeagueById
+      parameters:
+      - name: leagueId
+        in: path
+        description: Primary key of the league object referenced
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: Resource successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        400:
+          $ref: "#/components/responses/400"
+        403:
+          $ref: "#/components/responses/403"
+        404:
+          $ref: "#/components/responses/404"
+        408:
+          $ref: "#/components/responses/408"
+        413:
+          $ref: "#/components/responses/413"
+        429:
+          $ref: "#/components/responses/429"
+        431:
+          $ref: "#/components/responses/431"
+        500:
+          $ref: "#/components/responses/500"
+        503:
+          $ref: "#/components/responses/503"
+    put:
+      tags:
+      - record
+      summary: Update a league
+      operationId: updateLeagueById
+      parameters:
+      - name: leagueId
+        in: path
+        description: Primary key of the league object referenced
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VersionedRecord'
+        required: true
+      responses:
+        200:
+          description: Resource successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        422:
+          description: The resource cannot be updated as requested
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailureResponse'
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        403:
+          $ref: "#/components/responses/403"
+        404:
+          $ref: "#/components/responses/404"
+        408:
+          $ref: "#/components/responses/408"
+        413:
+          $ref: "#/components/responses/413"
+        429:
+          $ref: "#/components/responses/429"
+        431:
+          $ref: "#/components/responses/431"
+        500:
+          $ref: "#/components/responses/500"
+        503:
+          $ref: "#/components/responses/503"
+      x-codegen-request-body-name: body
+    delete:
+      tags:
+      - record
+      summary: Delete a league
+      operationId: deleteLeagueById
+      parameters:
+      - name: leagueId
+        in: path
+        description: Primary key of the league object referenced
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: Resource successfully deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        403:
+          $ref: "#/components/responses/403"
+        404:
+          $ref: "#/components/responses/404"
+        408:
+          $ref: "#/components/responses/408"
+        413:
+          $ref: "#/components/responses/413"
+        429:
+          $ref: "#/components/responses/429"
+        431:
+          $ref: "#/components/responses/431"
+        500:
+          $ref: "#/components/responses/500"
+        503:
+          $ref: "#/components/responses/503"
+  /CSRFToken:
+    get:
+      summary: Obtain a CSRFToken to put into request headers
+      operationId: getCSRFToken
+      responses:
+        200:
+          description: Operation successful
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - csrfToken
+                properties:
+                  csrfToken:
+                    type: string
+        408:
+          $ref: "#/components/responses/408"
+        413:
+          $ref: "#/components/responses/413"
+        429:
+          $ref: "#/components/responses/429"
+        431:
+          $ref: "#/components/responses/431"
+        500:
+          $ref: "#/components/responses/500"
+        503:
+          $ref: "#/components/responses/503"
   /porn:
     get:
+      tags:
+      - misc
       summary: Attempt to access a pornographic resource from this server
       responses:
         418:
@@ -614,6 +1177,34 @@ components:
           - private
       xml:
         name: UserProfile
+    TrackItem:
+      type: object
+      required:
+        - createdAt
+        - title
+        - description
+        - dueDate
+        - priority
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        title:
+          type: string
+        description:
+          type: string
+        dueDate:
+          type: string
+          format: date-time
+        priority:
+          type: integer
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+      xml:
+        name: TrackItem
     VersionedRecord:
       required:
       - createdAt
@@ -643,6 +1234,14 @@ components:
         verifiedContemporaneousRecord:
           type: boolean
           example: true
+        parent:
+          type: integer
+          description: The primary key of the parent record, if exists
+        children:
+          type: array
+          items:
+            type: integer
+          description: The primary key of the children records, if exist
       xml:
         name: VersionedRecord
     SuccessResponse:
@@ -770,3 +1369,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    googleIdentity:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://www.google.com/
+          tokenUrl: balabala
+          refreshUrl: balabala
+          scopes: {}
+security:
+  - googleIdentity: []
