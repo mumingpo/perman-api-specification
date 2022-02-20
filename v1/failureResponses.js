@@ -60,13 +60,13 @@ const failures = {
   422: {
     type: 'Unprocessable Entity',
     scopes: {
-      'auth': [
+      auth: [
         ['PasswordIncorrect', 'Password does not match with our record.'],
         ['PasswordIsNull', 'User password is null. Please reset password to log in.'],
         ['TokenIncorrect', 'Authentication token does not match with our record.'],
         ['TokenExpired', 'The authentication token has expired. Please request your desired action again.'],
       ],
-      'user': [
+      user: [
         ['UsernameInUse', 'An account with this username already exists.'],
         ['EmailInUse', 'An account with this email address already exists.'],
         ['UsernameNotInUse', 'We cannot find an account associated with this username.'],
@@ -115,18 +115,18 @@ const failures = {
 // convert into keyed object
 const failureResponses = {};
 
-for (const htmlStatus of Object.entries(failures)) {
+Object.entries(failures).forEach((htmlStatus) => {
   const htmlStatusCode = htmlStatus[0];
-  const htmlStatusType = htmlStatus[1].type;
+  // const htmlStatusType = htmlStatus[1].type;
   const htmlStatusFailures = htmlStatus[1].scopes;
   failureResponses[htmlStatusCode] = {};
 
-  for (const scope of Object.entries(htmlStatusFailures)) {
+  Object.entries(htmlStatusFailures).forEach((scope) => {
     const scopeName = scope[0];
     const scopeEntries = scope[1];
     failureResponses[htmlStatusCode][scopeName] = {};
 
-    for (const failureEntry of scopeEntries) {
+    scopeEntries.forEach((failureEntry) => {
       const failureCode = failureEntry[0];
       const failureMessage = failureEntry[1];
 
@@ -136,8 +136,8 @@ for (const htmlStatus of Object.entries(failures)) {
         failureCode,
         failureMessage,
       };
-    }
-  }
-}
+    });
+  });
+});
 
 export default failureResponses;
