@@ -115,15 +115,12 @@ const failures = {
 // convert into keyed object
 const failureResponses = {};
 
-Object.entries(failures).forEach((htmlStatus) => {
-  const htmlStatusCode = htmlStatus[0];
-  // const htmlStatusType = htmlStatus[1].type;
-  const htmlStatusFailures = htmlStatus[1].scopes;
+Object.keys(failures).forEach((htmlStatusCode) => {
+  const htmlStatusFailures = failures[htmlStatusCode].scopes;
   failureResponses[htmlStatusCode] = {};
 
-  Object.entries(htmlStatusFailures).forEach((scope) => {
-    const scopeName = scope[0];
-    const scopeEntries = scope[1];
+  Object.keys(htmlStatusFailures).forEach((scopeName) => {
+    const scopeEntries = htmlStatusFailures[scopeName];
     failureResponses[htmlStatusCode][scopeName] = {};
 
     scopeEntries.forEach((failureEntry) => {
