@@ -71,7 +71,7 @@ const failures = {
         ['EmailInUse', 'An account with this email address already exists.'],
         ['UsernameNotInUse', 'We cannot find an account associated with this username.'],
         ['EmailNotInUse', 'We cannot find an account associated with this email.'],
-        ['UsernameFormatIncorrect', 'The format of the username does not appear to match our requirements.'],
+        ['IncorrectUsernameFormat', 'The format of the username does not appear to match our requirements.'],
         ['PasswordTooSimple', 'Your new password is too simple'],
         ['PasswordCompromised', 'Your new password appears to have been compromised before. Please visit https://haveibeenpwned.com/Passwords for details.'],
       ],
