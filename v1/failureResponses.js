@@ -1,140 +1,153 @@
+/**
+ * Failures must have unique errorCodes
+ */
+
 // define failures
-const failures = {
-  400: {
-    type: 'Bad Request',
-    scopes: {
-      misc: [
-        ['BadRequest', 'The server cannot understand the request.'],
-      ],
-    },
+const failures = [
+  {
+    statusCode: 400,
+    errorCode: 'BadRequest',
+    scope: 'misc',
+    message: 'The API request is missing required fields.',
   },
-  401: {
-    type: 'Unauthorized',
-    scopes: {
-      auth: [
-        ['NotLoggedIn', 'User is not logged in.'],
-        ['SessionExpired', 'The user session has expired.'],
-      ],
-    },
+  {
+    statusCode: 401,
+    errorCode: 'Unauthorized',
+    scope: 'auth',
+    message: 'User must log in to perform the requested action.',
   },
-  403: {
-    type: 'Forbidden',
-    scopes: {
-      privilege: [
-        ['NotAuthorized', 'User is not authorized to view the requested resource.'],
-      ],
-    },
+  {
+    statusCode: 403,
+    errorCode: 'Forbidden',
+    scope: 'privilege',
+    message: 'User is not authorized to perform the requested action.',
   },
-  404: {
-    type: 'Not Found',
-    scopes: {
-      misc: [
-        ['NotFound', 'The requested resource is not found.'],
-      ],
-    },
+  {
+    statusCode: 404,
+    errorCode: 'NotFound',
+    scope: 'misc',
+    message: 'The requested resource is not found on the server.',
   },
-  408: {
-    type: 'Request Timeout',
-    scopes: {
-      misc: [
-        ['RequestTimeout', 'The request has been timed-out.'],
-      ],
-    },
+  {
+    statusCode: 413,
+    errorCode: 'PayloadTooLarge',
+    scope: 'misc',
+    message: 'The body of the request is too large.',
   },
-  413: {
-    type: 'Payload Too Large',
-    scopes: {
-      misc: [
-        ['PayloadTooLarge', 'Your request sent to the server is too large.'],
-      ],
-    },
+  {
+    statusCode: 418,
+    errorCode: 'Nope',
+    scope: 'misc',
+    message: 'Sir this is an Arby\'s',
   },
-  418: {
-    type: 'I\'m A Teapot',
-    scopes: {
-      misc: [
-        ['Nope', 'Sir, this is an Arby\'s.'],
-      ],
-    },
+  // username
+  {
+    statusCode: 422,
+    errorCode: 'UsernameAlreadyInUse',
+    scope: 'user',
+    message: 'An account with this username already exists.',
   },
-  422: {
-    type: 'Unprocessable Entity',
-    scopes: {
-      auth: [
-        ['PasswordIncorrect', 'Password does not match with our record.'],
-        ['PasswordIsNull', 'User password is null. Please reset password to log in.'],
-        ['TokenIncorrect', 'Authentication token does not match with our record.'],
-        ['TokenExpired', 'The authentication token has expired. Please request your desired action again.'],
-      ],
-      user: [
-        ['UsernameInUse', 'An account with this username already exists.'],
-        ['EmailInUse', 'An account with this email address already exists.'],
-        ['UsernameNotInUse', 'We cannot find an account associated with this username.'],
-        ['EmailNotInUse', 'We cannot find an account associated with this email.'],
-        ['IncorrectUsernameFormat', 'The format of the username does not appear to match our requirements.'],
-        ['PasswordTooSimple', 'Your new password is too simple'],
-        ['PasswordCompromised', 'Your new password appears to have been compromised before. Please visit https://haveibeenpwned.com/Passwords for details.'],
-      ],
-    },
+  {
+    statusCode: 422,
+    errorCode: 'IncorrectUsernameFormat',
+    scope: 'user',
+    message: 'The provided username does not appear to match the format requirement',
   },
-  429: {
-    type: 'Too Many Requests',
-    scopes: {
-      misc: [
-        ['TooManyRequests', 'You have recently made too many requests. Please try again later.'],
-      ],
-    },
+  {
+    statusCode: 422,
+    errorCode: 'UsernameNotInUse',
+    scope: 'user',
+    message: 'There does not appear to be an account associated with this username.',
   },
-  431: {
-    type: 'Request Header Fields Too Large',
-    scopes: {
-      misc: [
-        ['RequestHeaderFieldsTooLarge', 'The header portion of your request is too large.'],
-      ],
-    },
+  // email
+  {
+    statusCode: 422,
+    errorCode: 'EmailAlreadyInUse',
+    scope: 'user',
+    message: 'An account with this email already exists.',
   },
-  // errors should not be in failureResponses
-  // 500: {
-  //  type: 'Internal Server Error',
-  //  scopes: {
-  //    misc: [
-  //      ['General', 'An unspecified error has occured.'],
-  //    ],
-  //  },
+  {
+    statusCode: 422,
+    errorCode: 'IncorrectEmailFormat',
+    scope: 'user',
+    message: 'The provided email address does not appear to be in the correct format',
+  },
+  {
+    statusCode: 422,
+    errorCode: 'EmailNotInUse',
+    scope: 'user',
+    message: 'There does not appear to be an account associated with this email address.',
+  },
+  // email verification status
+  {
+    statusCode: 422,
+    errorCode: 'EmailNotVerified',
+    scope: 'user',
+    message: 'The email address associated with this account has yet to be verified.',
+  },
+  {
+    statusCode: 422,
+    errorCode: 'EmailAlreadyVerified',
+    scope: 'user',
+    message: 'The email address associated with this account has already been verified.',
+  },
+  // password
+  {
+    statusCode: 422,
+    errorCode: 'PasswordIncorrect',
+    scope: 'user',
+    message: 'The provided password does not match with our records.',
+  {
+    statusCode: 422,
+    errorCode: 'PasswordTooSimple',
+    scope: 'user',
+    message: 'Your new password is too simple.',
+  },
+  {
+    statusCode: 422,
+    errorCode: 'PasswordCompromised',
+    scope: 'user',
+    message: 'This password has been compromised thus is unsafe to use. Please visit https://haveibeenpwned.com/Passwords for details.',
+  },
+  },
+  // token
+  {
+    statusCode: 422,
+    errorCode: 'TokenInvalid',
+    scope: 'user',
+    message: 'The provided authentication token is invalid.',
+  },
+  {
+    statusCode: 422,
+    errorCode: 'TokenExpired',
+    scope: 'user',
+    message: 'The provided authentication token has expired.',
+  },
+  {
+    statusCode: 429,
+    errorCode: 'TooManyRequests',
+    scope: 'misc',
+    message: 'You have recently made too many requests. Please try again later.',
+  },
+  {
+    statusCode: 431,
+    errorCode: 'RequestHeaderFieldsTooLarge',
+    scope: 'misc',
+    message: 'The header portion of your request is too large.',
+  },
+  // {
+  //   statusCode:,
+  //   errorCode:,
+  //   scope:,
+  //   message:,
   // },
-  // 503: {
-  //  type: 'Service Unavailable',
-  //  scopes: {
-  //    misc: [
-  //      ['ServiceUnavailable', 'The server is unavailable to handle requests at this time. Please try again later.'],
-  //    ],
-  //  },
-  // },
-};
+];
 
 // convert into keyed object
 const failureResponses = {};
 
-Object.keys(failures).forEach((htmlStatusCode) => {
-  const htmlStatusFailures = failures[htmlStatusCode].scopes;
-  failureResponses[htmlStatusCode] = {};
-
-  Object.keys(htmlStatusFailures).forEach((scopeName) => {
-    const scopeEntries = htmlStatusFailures[scopeName];
-    failureResponses[htmlStatusCode][scopeName] = {};
-
-    scopeEntries.forEach((failureEntry) => {
-      const failureCode = failureEntry[0];
-      const failureMessage = failureEntry[1];
-
-      failureResponses[htmlStatusCode][scopeName][failureCode] = {
-        htmlStatusCode,
-        scopeName,
-        failureCode,
-        failureMessage,
-      };
-    });
-  });
+failures.forEach((failure) => {
+  failureResponses[failure.errorCode] = failure;
 });
 
 export default failureResponses;

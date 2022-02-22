@@ -167,12 +167,12 @@ paths:
         503:
           $ref: "#/components/responses/503"
       x-codegen-request-body-name: body
-  /user/updatePassword:
+  /user/changePassword:
     post:
       tags:
       - user
-      summary: Update user's password using the current password
-      operationId: updatePassword
+      summary: Change user's password using the current password
+      operationId: changePassword
       requestBody:
         description: An object containing the old and new passwords
         content:
