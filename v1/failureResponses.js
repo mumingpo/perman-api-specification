@@ -97,6 +97,7 @@ const failures = [
     errorCode: 'PasswordIncorrect',
     scope: 'user',
     message: 'The provided password does not match with our records.',
+  },
   {
     statusCode: 422,
     errorCode: 'PasswordTooSimple',
@@ -108,7 +109,6 @@ const failures = [
     errorCode: 'PasswordCompromised',
     scope: 'user',
     message: 'This password has been compromised thus is unsafe to use. Please visit https://haveibeenpwned.com/Passwords for details.',
-  },
   },
   // token
   {
