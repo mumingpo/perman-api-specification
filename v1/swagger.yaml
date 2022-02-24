@@ -74,6 +74,54 @@ paths:
         503:
           $ref: "#/components/responses/503"
       x-codegen-request-body-name: body
+  /user/resendVerificationLink:
+    post:
+      tags:
+      - user
+      summary: Resend the email verification link through email
+      operationId: resendVerificationLink
+      requestBody:
+        description: An object containing the email address used for registration
+        content:
+          application/json:
+            schema:
+              required:
+              - email
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: somebody@example.com
+        required: true
+      responses:
+        200:
+          description: A verificaiton link has been sent through the email address
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        422:
+          description: An account with this email address does not exist or have already been validated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailureResponse'
+        400:
+          $ref: "#/components/responses/400"
+        408:
+          $ref: "#/components/responses/408"
+        413:
+          $ref: "#/components/responses/413"
+        429:
+          $ref: "#/components/responses/429"
+        431:
+          $ref: "#/components/responses/431"
+        500:
+          $ref: "#/components/responses/500"
+        503:
+          $ref: "#/components/responses/503"
+      x-codegen-request-body-name: body
   /user/checkUsername:
     get:
       tags:
@@ -109,7 +157,7 @@ paths:
           $ref: "#/components/responses/500"
         503:
           $ref: "#/components/responses/503"
-  /user/verifyEmail:
+  /user/verifyEmailAndInitialize:
     post:
       tags:
       - user
@@ -1245,15 +1293,8 @@ components:
       xml:
         name: VersionedRecord
     SuccessResponse:
-      required:
-      - data
-      - status
       type: object
       properties:
-        status:
-          type: string
-          enum:
-          - success
         data:
           type: object
           properties: {}
@@ -1262,50 +1303,45 @@ components:
     FailureResponse:
       required:
       - data
-      - status
       type: object
       properties:
-        status:
-          type: string
-          enum:
-          - failure
         data:
-          required:
-          - reasons
           type: object
+          required:
+          - statusCode
+          - message
           properties:
-            reasons:
-              type: array
-              description: A list of reasons why the request failed
-              items:
-                required:
-                - failureCode
-                - failureMessage
-                - scopeName
-                type: object
-                properties:
-                  scopeName:
-                    type: string
-                  failureCode:
-                    type: string
-                  failureMessage:
-                    type: string
+            statusCode:
+              type: integer
+            message:
+              type: string
+            errorCode:
+              type: string
+            scope:
+              type: string
       description: Request failed due to a problem with the request
       externalDocs:
         description: Failure responses
         url: https://github.com/mumingpo/perman-api-specification/blob/main/v1/failureResponses.js
     ErrorResponse:
       required:
-      - message
-      - status
+      - data
       type: object
       properties:
-        status:
-          type: string
-          enum:
-          - error
-        message:
-          type: string
+        data:
+          type: object
+          required:
+          - statusCode
+          - message
+          properties:
+            statusCode:
+              type: integer
+            message:
+              type: string
+            errorCode:
+              type: string
+            scope:
+              type: string
           description: A message indicating the problem experienced by the server
       description: Request failed due to a problem with the server
   responses:
