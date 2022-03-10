@@ -113,13 +113,13 @@ const failures = [
   // token
   {
     statusCode: 422,
-    errorCode: 'TokenInvalid',
+    errorCode: 'AccountRecoveryTokenInvalid',
     scope: 'user',
     message: 'The provided authentication token is invalid.',
   },
   {
     statusCode: 422,
-    errorCode: 'TokenExpired',
+    errorCode: 'AccountRecoveryTokenExpired',
     scope: 'user',
     message: 'The provided authentication token has expired.',
   },

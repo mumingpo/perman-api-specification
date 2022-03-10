@@ -14,7 +14,7 @@ externalDocs:
   url: https://github.com/mumingpo/perman-api-specification/blob/main/v1/errorResponses.js
 servers:
 - url: https://api.perman.io/v1
-- url: http://api.perman.io/v1
+- url: http://localhost:8314/v1
 tags:
 - name: user
   description: Operations concerning individual users
@@ -47,32 +47,13 @@ paths:
         required: true
       responses:
         200:
-          description: An account has been created and a verificaiton link has been
-            sent through the email address
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        422:
-          description: The email address cannot be used to create an account
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        400:
-          $ref: "#/components/responses/400"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
       x-codegen-request-body-name: body
   /user/resendVerificationLink:
     post:
@@ -96,31 +77,13 @@ paths:
         required: true
       responses:
         200:
-          description: A verificaiton link has been sent through the email address
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        422:
-          description: An account with this email address does not exist or have already been validated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        400:
-          $ref: "#/components/responses/400"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
       x-codegen-request-body-name: body
   /user/checkUsername:
     get:
@@ -138,25 +101,13 @@ paths:
           type: string
       responses:
         200:
-          description: Result on whether username is available
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        400:
-          $ref: "#/components/responses/400"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
   /user/verifyEmailAndInitialize:
     post:
       tags:
@@ -195,25 +146,13 @@ paths:
         required: true
       responses:
         200:
-          description: Email has been verified and the account has been initialized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        400:
-          $ref: "#/components/responses/400"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
       x-codegen-request-body-name: body
   /user/changePassword:
     post:
@@ -240,36 +179,43 @@ paths:
         required: true
       responses:
         200:
-          description: Password has been updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        422:
-          description: Password cannot be updated as requested
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        400:
-          $ref: "#/components/responses/400"
-        401:
-          $ref: "#/components/responses/401"
-        403:
-          $ref: "#/components/responses/403"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
       x-codegen-request-body-name: body
+  /user/recoverUsername:
+    post:
+      tags:
+      - user
+      summary: Request the username through an email using the email address associated with the account
+      operationId: recoverUsername
+      requestBody:
+        description: An object containing the email associated with the account
+        content:
+          application/json:
+            schema:
+              required:
+              - email
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: somebody@example.com
+        required: true
+      responses:
+        200:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
   /user/requestPasswordReset:
     post:
       tags:
@@ -292,33 +238,13 @@ paths:
         required: true
       responses:
         200:
-          description: A password reset email has been sent to the email associated
-            with the account, if it exists.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        422:
-          description: Account cannot be initialized due to problems within submitted
-            form
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        400:
-          $ref: "#/components/responses/400"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
       x-codegen-request-body-name: body
   /user/resetPassword:
     post:
@@ -348,31 +274,13 @@ paths:
         required: true
       responses:
         200:
-          description: Password has been reset
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        422:
-          description: Password cannot be reset as requested
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        400:
-          $ref: "#/components/responses/400"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
       x-codegen-request-body-name: body
   /user/userProfile:
     get:
@@ -382,29 +290,13 @@ paths:
       operationId: getProfile
       responses:
         200:
-          description: Successfully retrieved the user profile
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        400:
-          $ref: "#/components/responses/400"
-        401:
-          $ref: "#/components/responses/401"
-        403:
-          $ref: "#/components/responses/403"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
     post:
       tags:
       - user
@@ -419,35 +311,13 @@ paths:
         required: true
       responses:
         200:
-          description: User profile has been successfully updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        422:
-          description: User profile cannot be updated as requested
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        400:
-          $ref: "#/components/responses/400"
-        401:
-          $ref: "#/components/responses/401"
-        403:
-          $ref: "#/components/responses/403"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
       x-codegen-request-body-name: body
 
   /trackItem:
@@ -464,37 +334,13 @@ paths:
         required: true
       responses:
         201:
-          description: Resource successfully created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        422:
-          description: Resource cannot be created as requested
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        400:
-          $ref: "#/components/responses/400"
-        401:
-          $ref: "#/components/responses/401"
-        403:
-          $ref: "#/components/responses/403"
-        404:
-          $ref: "#/components/responses/404"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
       x-codegen-request-body-name: body
   /trackItem/{trackItemId}:
     get:
@@ -511,29 +357,13 @@ paths:
           type: integer
       responses:
         200:
-          description: Resource successfully retrieved
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        400:
-          $ref: "#/components/responses/400"
-        403:
-          $ref: "#/components/responses/403"
-        404:
-          $ref: "#/components/responses/404"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
     put:
       tags:
       - trackItem
@@ -554,37 +384,13 @@ paths:
         required: true
       responses:
         200:
-          description: Resource successfully updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        422:
-          description: The resource cannot be updated as requested
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        400:
-          $ref: "#/components/responses/400"
-        401:
-          $ref: "#/components/responses/401"
-        403:
-          $ref: "#/components/responses/403"
-        404:
-          $ref: "#/components/responses/404"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
       x-codegen-request-body-name: body
     delete:
       tags:
@@ -600,34 +406,13 @@ paths:
           type: integer
       responses:
         200:
-          description: Resource successfully deleted
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        400:
-          $ref: "#/components/responses/400"
-        401:
-          $ref: "#/components/responses/401"
-        403:
-          $ref: "#/components/responses/403"
-        404:
-          $ref: "#/components/responses/404"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
-
-
-
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
   /step:
     post:
       tags:
@@ -642,37 +427,13 @@ paths:
         required: true
       responses:
         201:
-          description: Resource successfully created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        422:
-          description: Resource cannot be created as requested
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        400:
-          $ref: "#/components/responses/400"
-        401:
-          $ref: "#/components/responses/401"
-        403:
-          $ref: "#/components/responses/403"
-        404:
-          $ref: "#/components/responses/404"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
       x-codegen-request-body-name: body
   /step/{stepId}:
     get:
@@ -689,29 +450,13 @@ paths:
           type: integer
       responses:
         200:
-          description: Resource successfully retrieved
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        400:
-          $ref: "#/components/responses/400"
-        403:
-          $ref: "#/components/responses/403"
-        404:
-          $ref: "#/components/responses/404"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
     put:
       tags:
       - record
@@ -732,37 +477,13 @@ paths:
         required: true
       responses:
         200:
-          description: Resource successfully updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        422:
-          description: The resource cannot be updated as requested
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        400:
-          $ref: "#/components/responses/400"
-        401:
-          $ref: "#/components/responses/401"
-        403:
-          $ref: "#/components/responses/403"
-        404:
-          $ref: "#/components/responses/404"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
       x-codegen-request-body-name: body
     delete:
       tags:
@@ -778,31 +499,13 @@ paths:
           type: integer
       responses:
         200:
-          description: Resource successfully deleted
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        400:
-          $ref: "#/components/responses/400"
-        401:
-          $ref: "#/components/responses/401"
-        403:
-          $ref: "#/components/responses/403"
-        404:
-          $ref: "#/components/responses/404"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
   /mile:
     post:
       tags:
@@ -817,37 +520,13 @@ paths:
         required: true
       responses:
         201:
-          description: Resource successfully created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        422:
-          description: Resource cannot be created as requested
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        400:
-          $ref: "#/components/responses/400"
-        401:
-          $ref: "#/components/responses/401"
-        403:
-          $ref: "#/components/responses/403"
-        404:
-          $ref: "#/components/responses/404"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
       x-codegen-request-body-name: body
   /mile/{mileId}:
     get:
@@ -864,29 +543,13 @@ paths:
           type: integer
       responses:
         200:
-          description: Resource successfully retrieved
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        400:
-          $ref: "#/components/responses/400"
-        403:
-          $ref: "#/components/responses/403"
-        404:
-          $ref: "#/components/responses/404"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
     put:
       tags:
       - record
@@ -907,37 +570,13 @@ paths:
         required: true
       responses:
         200:
-          description: Resource successfully updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        422:
-          description: The resource cannot be updated as requested
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        400:
-          $ref: "#/components/responses/400"
-        401:
-          $ref: "#/components/responses/401"
-        403:
-          $ref: "#/components/responses/403"
-        404:
-          $ref: "#/components/responses/404"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
       x-codegen-request-body-name: body
     delete:
       tags:
@@ -953,31 +592,13 @@ paths:
           type: integer
       responses:
         200:
-          description: Resource successfully deleted
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        400:
-          $ref: "#/components/responses/400"
-        401:
-          $ref: "#/components/responses/401"
-        403:
-          $ref: "#/components/responses/403"
-        404:
-          $ref: "#/components/responses/404"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
   /league:
     post:
       tags:
@@ -992,37 +613,13 @@ paths:
         required: true
       responses:
         201:
-          description: Resource successfully created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        422:
-          description: Resource cannot be created as requested
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        400:
-          $ref: "#/components/responses/400"
-        401:
-          $ref: "#/components/responses/401"
-        403:
-          $ref: "#/components/responses/403"
-        404:
-          $ref: "#/components/responses/404"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
       x-codegen-request-body-name: body
   /league/{leagueId}:
     get:
@@ -1039,29 +636,13 @@ paths:
           type: integer
       responses:
         200:
-          description: Resource successfully retrieved
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        400:
-          $ref: "#/components/responses/400"
-        403:
-          $ref: "#/components/responses/403"
-        404:
-          $ref: "#/components/responses/404"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
     put:
       tags:
       - record
@@ -1082,37 +663,13 @@ paths:
         required: true
       responses:
         200:
-          description: Resource successfully updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        422:
-          description: The resource cannot be updated as requested
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailureResponse'
-        400:
-          $ref: "#/components/responses/400"
-        401:
-          $ref: "#/components/responses/401"
-        403:
-          $ref: "#/components/responses/403"
-        404:
-          $ref: "#/components/responses/404"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
       x-codegen-request-body-name: body
     delete:
       tags:
@@ -1128,59 +685,13 @@ paths:
           type: integer
       responses:
         200:
-          description: Resource successfully deleted
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        400:
-          $ref: "#/components/responses/400"
-        401:
-          $ref: "#/components/responses/401"
-        403:
-          $ref: "#/components/responses/403"
-        404:
-          $ref: "#/components/responses/404"
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
+          $ref: '#/components/responses/GeneralSuccessResponse'
         500:
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         503:
-          $ref: "#/components/responses/503"
-  /CSRFToken:
-    get:
-      summary: Obtain a CSRFToken to put into request headers
-      operationId: getCSRFToken
-      responses:
-        200:
-          description: Operation successful
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                - csrfToken
-                properties:
-                  csrfToken:
-                    type: string
-        408:
-          $ref: "#/components/responses/408"
-        413:
-          $ref: "#/components/responses/413"
-        429:
-          $ref: "#/components/responses/429"
-        431:
-          $ref: "#/components/responses/431"
-        500:
-          $ref: "#/components/responses/500"
-        503:
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
   /porn:
     get:
       tags:
@@ -1208,10 +719,6 @@ components:
           type: string
           format: date
           example: 2000-01-01
-        timeZone:
-          type: string
-          format: IANA
-          example: America/New_York
         locale:
           type: string
           format: LDML
@@ -1345,52 +852,60 @@ components:
           description: A message indicating the problem experienced by the server
       description: Request failed due to a problem with the server
   responses:
-    '400':
-      description: The request has been malformed
+    GeneralSuccessResponse:
+      description: The request has been successfully executed
       content:
         application/json:
+          examples:
+            Success:
+              $ref: '#/components/examples/SuccessfulRequest'
           schema:
-            $ref: '#/components/schemas/FailureResponse'
-    '401':
-      description: User must log in to perform this action
+            $ref: '#/components/schemas/SuccessResponse'
+    GeneralFailureResponse:
+      description: Something is wrong with the user's request
       content:
         application/json:
-          schema:
-            $ref: '#/components/schemas/FailureResponse'
-    '403':
-      description: User is not authorized to perform this action
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/FailureResponse'
-    '404':
-      description: The requested resource does not exist
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/FailureResponse'
-    '408':
-      description: Request has timed out
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/FailureResponse'
-    '413':
-      description: The request payload is too large
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/FailureResponse'
-    '429':
-      description: User have made too many requests
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/FailureResponse'
-    '431':
-      description: The request header is too large
-      content:
-        application/json:
+          examples:
+            BadRequest:
+              $ref: '#/components/examples/BadRequest'
+            Unauthorized:
+              $ref: '#/components/examples/Unauthorized'
+            Forbidden:
+              $ref: '#/components/examples/Forbidden'
+            NotFound:
+              $ref: '#/components/examples/NotFound'
+            PayloadTooLarge:
+              $ref: '#/components/examples/PayloadTooLarge'
+            UsernameAlreadyInUse:
+              $ref: '#/components/examples/UsernameAlreadyInUse'
+            IncorrectUsernameFormat:
+              $ref: '#/components/examples/IncorrectUsernameFormat'
+            UsernameNotInUse:
+              $ref: '#/components/examples/UsernameNotInUse'
+            EmailAlreadyInUse:
+              $ref: '#/components/examples/EmailAlreadyInUse'
+            IncorrectEmailFormat:
+              $ref: '#/components/examples/IncorrectEmailFormat'
+            EmailNotInUse:
+              $ref: '#/components/examples/EmailNotInUse'
+            EmailNotVerified:
+              $ref: '#/components/examples/EmailNotVerified'
+            EmailAlreadyVerified:
+              $ref: '#/components/examples/EmailAlreadyVerified'
+            PasswordIncorrect:
+              $ref: '#/components/examples/PasswordIncorrect'
+            PasswordTooSimple:
+              $ref: '#/components/examples/PasswordTooSimple'
+            PasswordCompromised:
+              $ref: '#/components/examples/PasswordCompromised'
+            AccountRecoveryTokenInvalid:
+              $ref: '#/components/examples/AccountRecoveryTokenInvalid'
+            AccountRecoveryTokenExpired:
+              $ref: '#/components/examples/AccountRecoveryTokenExpired'
+            TooManyRequests:
+              $ref: '#/components/examples/TooManyRequests'
+            RequestHeaderFieldsTooLarge:
+              $ref: '#/components/examples/RequestHeaderFieldsTooLarge'
           schema:
             $ref: '#/components/schemas/FailureResponse'
     '500':
@@ -1405,6 +920,71 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
+  examples:
+    SuccessfulRequest:
+      summary: Response for a successful request
+      value:
+        data: {}
+    BadRequest:
+      summary: The API request is missing required fields.
+      value: '{"data": {"statusCode":400,"errorCode":"BadRequest","scope":"misc","message":"The API request is missing required fields."}}'
+    Unauthorized:
+      summary: User must log in to perform the requested action.
+      value: '{"data": {"statusCode":401,"errorCode":"Unauthorized","scope":"auth","message":"User must log in to perform the requested action."}}'
+    Forbidden:
+      summary: User is not authorized to perform the requested action.
+      value: '{"data": {"statusCode":403,"errorCode":"Forbidden","scope":"privilege","message":"User is not authorized to perform the requested action."}}'
+    NotFound:
+      summary: The requested resource is not found on the server.
+      value: '{"data": {"statusCode":404,"errorCode":"NotFound","scope":"misc","message":"The requested resource is not found on the server."}}'
+    PayloadTooLarge:
+      summary: The body of the request is too large.
+      value: '{"data": {"statusCode":413,"errorCode":"PayloadTooLarge","scope":"misc","message":"The body of the request is too large."}}'
+    UsernameAlreadyInUse:
+      summary: An account with this username already exists.
+      value: '{"data": {"statusCode":422,"errorCode":"UsernameAlreadyInUse","scope":"user","message":"An account with this username already exists."}}'
+    IncorrectUsernameFormat:
+      summary: The provided username does not appear to match the format requirement
+      value: '{"data": {"statusCode":422,"errorCode":"IncorrectUsernameFormat","scope":"user","message":"The provided username does not appear to match the format requirement"}}'
+    UsernameNotInUse:
+      summary: There does not appear to be an account associated with this username.
+      value: '{"data": {"statusCode":422,"errorCode":"UsernameNotInUse","scope":"user","message":"There does not appear to be an account associated with this username."}}'
+    EmailAlreadyInUse:
+      summary: An account with this email already exists.
+      value: '{"data": {"statusCode":422,"errorCode":"EmailAlreadyInUse","scope":"user","message":"An account with this email already exists."}}'
+    IncorrectEmailFormat:
+      summary: The provided email address does not appear to be in the correct format
+      value: '{"data": {"statusCode":422,"errorCode":"IncorrectEmailFormat","scope":"user","message":"The provided email address does not appear to be in the correct format"}}'
+    EmailNotInUse:
+      summary: There does not appear to be an account associated with this email address.
+      value: '{"data": {"statusCode":422,"errorCode":"EmailNotInUse","scope":"user","message":"There does not appear to be an account associated with this email address."}}'
+    EmailNotVerified:
+      summary: The email address associated with this account has yet to be verified.
+      value: '{"data": {"statusCode":422,"errorCode":"EmailNotVerified","scope":"user","message":"The email address associated with this account has yet to be verified."}}'
+    EmailAlreadyVerified:
+      summary: The email address associated with this account has already been verified.
+      value: '{"data": {"statusCode":422,"errorCode":"EmailAlreadyVerified","scope":"user","message":"The email address associated with this account has already been verified."}}'
+    PasswordIncorrect:
+      summary: The provided password does not match with our records.
+      value: '{"data": {"statusCode":422,"errorCode":"PasswordIncorrect","scope":"user","message":"The provided password does not match with our records."}}'
+    PasswordTooSimple:
+      summary: Your new password is too simple.
+      value: '{"data": {"statusCode":422,"errorCode":"PasswordTooSimple","scope":"user","message":"Your new password is too simple."}}'
+    PasswordCompromised:
+      summary: This password has been compromised thus is unsafe to use. Please visit https://haveibeenpwned.com/Passwords for details.
+      value: '{"data": {"statusCode":422,"errorCode":"PasswordCompromised","scope":"user","message":"This password has been compromised thus is unsafe to use. Please visit https://haveibeenpwned.com/Passwords for details."}}'
+    AccountRecoveryTokenInvalid:
+      summary: The provided authentication token is invalid.
+      value: '{"data": {"statusCode":422,"errorCode":"AccountRecoveryTokenInvalid","scope":"user","message":"The provided authentication token is invalid."}}'
+    AccountRecoveryTokenExpired:
+      summary: The provided authentication token has expired.
+      value: '{"data": {"statusCode":422,"errorCode":"AccountRecoveryTokenExpired","scope":"user","message":"The provided authentication token has expired."}}'
+    TooManyRequests:
+      summary: You have recently made too many requests. Please try again later.
+      value: '{"data": {"statusCode":429,"errorCode":"TooManyRequests","scope":"misc","message":"You have recently made too many requests. Please try again later."}}'
+    RequestHeaderFieldsTooLarge:
+      summary: The header portion of your request is too large.
+      value: '{"data": {"statusCode":431,"errorCode":"RequestHeaderFieldsTooLarge","scope":"misc","message":"The header portion of your request is too large."}}'
   securitySchemes:
     bearerAuth:
       type: http
