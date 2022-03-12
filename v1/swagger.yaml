@@ -261,6 +261,7 @@ paths:
               required:
               - email
               - token
+              - newPassword
               type: object
               properties:
                 email:
@@ -271,6 +272,10 @@ paths:
                   type: string
                   description: A 16 byte authentication token encoded in base16 representation
                   example: 0123456789abcdef0123456789abcdef
+                newPassword:
+                  type: string
+                  example: CorrectHorseBatteryStaple
+
         required: true
       responses:
         200:
