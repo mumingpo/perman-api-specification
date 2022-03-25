@@ -3,7 +3,15 @@
  */
 
 // define failures
-const failures = [
+
+type FailureType = {
+  statusCode: number,
+  errorCode: string,
+  scope: string,
+  message: string,
+}
+
+const failures: Array<FailureType> = [
   {
     statusCode: 400,
     errorCode: 'BadRequest',
@@ -15,6 +23,12 @@ const failures = [
     errorCode: 'Unauthorized',
     scope: 'auth',
     message: 'User must log in to perform the requested action.',
+  },
+  {
+    statusCode: 401,
+    errorCode: 'InvalidCredentials',
+    scope: 'auth',
+    message: 'Your login credentials does not match with our records.',
   },
   {
     statusCode: 403,
@@ -144,10 +158,11 @@ const failures = [
 ];
 
 // convert into keyed object
-const failureResponses = {};
+const failureResponses: Record<string, FailureType> = {};
 
 failures.forEach((failure) => {
   failureResponses[failure.errorCode] = failure;
 });
 
 export default failureResponses;
+export type { FailureType };
