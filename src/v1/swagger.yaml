@@ -1,0 +1,1007 @@
+openapi: 3.0.1
+info:
+  title: Perman-api
+  description: This is the API description for Perman-api.
+  termsOfService: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+  contact:
+    email: mumingpo@gmail.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: "1.0"
+externalDocs:
+  description: Error responses
+  url: https://github.com/mumingpo/perman-api-specification/blob/main/v1/errorResponses.js
+servers:
+- url: https://api.perman.io/v1
+- url: http://localhost:8314/v1
+tags:
+- name: user
+  description: Operations concerning individual users
+- name: track
+  description: Operations accessing individual tracks
+- name: record
+  description: Operations accessing individual records
+- name: misc
+  description: Miscellaneous operations
+paths:
+  /user/registerFromEmail:
+    post:
+      tags:
+      - user
+      summary: Create a new user from an email address
+      operationId: registerFromEmail
+      requestBody:
+        description: An object containing the email address used for registration
+        content:
+          application/json:
+            schema:
+              required:
+              - email
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: somebody@example.com
+        required: true
+      responses:
+        200:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+      x-codegen-request-body-name: body
+  /user/resendVerificationLink:
+    post:
+      tags:
+      - user
+      summary: Resend the email verification link through email
+      operationId: resendVerificationLink
+      requestBody:
+        description: An object containing the email address used for registration
+        content:
+          application/json:
+            schema:
+              required:
+              - email
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: somebody@example.com
+        required: true
+      responses:
+        200:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+      x-codegen-request-body-name: body
+  /user/checkUsername:
+    get:
+      tags:
+      - user
+      summary: Check whether a username is in-use
+      operationId: checkUsername
+      parameters:
+      - name: username
+        in: query
+        description: A username to be checked
+        required: true
+        schema:
+          pattern: ^[A-Za-z][A-Za-z0-9]{5,29}$
+          type: string
+      responses:
+        200:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+  /user/verifyEmailAndInitialize:
+    post:
+      tags:
+      - user
+      summary: Verify the email address used to create the account and initialize
+        user
+      operationId: verifyEmail
+      requestBody:
+        description: An object containing the email address, token, and the new username
+          and password needed for the initialization process
+        content:
+          application/json:
+            schema:
+              required:
+              - email
+              - newPassword
+              - newUsername
+              - token
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: somebody@example.com
+                token:
+                  type: string
+                  description: A 16 byte authentication token encoded in base16 representation
+                  example: 0123456789abcdef0123456789abcdef
+                newUsername:
+                  pattern: ^[A-Za-z][0-9A-Za-z]{5,29}$
+                  type: string
+                  example: DebraAbraca03
+                newPassword:
+                  type: string
+                  example: BadPa$$w0rd
+        required: true
+      responses:
+        200:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+      x-codegen-request-body-name: body
+  /user/changePassword:
+    post:
+      tags:
+      - user
+      summary: Change user's password using the current password
+      operationId: changePassword
+      requestBody:
+        description: An object containing the old and new passwords
+        content:
+          application/json:
+            schema:
+              required:
+              - newPassword
+              - oldPassword
+              type: object
+              properties:
+                oldPassword:
+                  type: string
+                  example: BadPa$$w0rd
+                newPassword:
+                  type: string
+                  example: CorrectHorseBatteryStaple
+        required: true
+      responses:
+        200:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+      x-codegen-request-body-name: body
+  /user/recoverUsername:
+    post:
+      tags:
+      - user
+      summary: Request the username through an email using the email address associated with the account
+      operationId: recoverUsername
+      requestBody:
+        description: An object containing the email associated with the account
+        content:
+          application/json:
+            schema:
+              required:
+              - email
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: somebody@example.com
+        required: true
+      responses:
+        200:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+  /user/requestPasswordReset:
+    post:
+      tags:
+      - user
+      summary: Request a password reset email
+      operationId: requestPasswordReset
+      requestBody:
+        description: An object containing the email address of the account
+        content:
+          application/json:
+            schema:
+              required:
+              - email
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: somebody@example.com
+        required: true
+      responses:
+        200:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+      x-codegen-request-body-name: body
+  /user/resetPassword:
+    post:
+      tags:
+      - user
+      summary: Use a token to reset the password
+      operationId: resetPassword
+      requestBody:
+        description: An object containing the email address and temporary token of
+          the account
+        content:
+          application/json:
+            schema:
+              required:
+              - email
+              - token
+              - newPassword
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: somebody@example.com
+                token:
+                  type: string
+                  description: A 16 byte authentication token encoded in base16 representation
+                  example: 0123456789abcdef0123456789abcdef
+                newPassword:
+                  type: string
+                  example: CorrectHorseBatteryStaple
+
+        required: true
+      responses:
+        200:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+      x-codegen-request-body-name: body
+  /user/userProfile:
+    get:
+      tags:
+      - user
+      summary: Get the current values of user profile
+      operationId: getProfile
+      responses:
+        200:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+    post:
+      tags:
+      - user
+      summary: Update user profile
+      operationId: updateProfile
+      requestBody:
+        description: An object containing the user profile fields to be updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+        required: true
+      responses:
+        200:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+      x-codegen-request-body-name: body
+
+  /trackItem:
+    post:
+      tags:
+      - trackItem
+      summary: Create a track item
+      operationId: createTrackItem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrackItem'
+        required: true
+      responses:
+        201:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+      x-codegen-request-body-name: body
+  /trackItem/{trackItemId}:
+    get:
+      tags:
+      - trackItem
+      summary: Fetch a track item
+      operationId: getTrackItemById
+      parameters:
+      - name: trackItemId
+        in: path
+        description: Primary key of the step object referenced
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+    put:
+      tags:
+      - trackItem
+      summary: Update a track item
+      operationId: updateTrackItemById
+      parameters:
+      - name: trackItemId
+        in: path
+        description: Primary key of the track item object referenced
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrackItem'
+        required: true
+      responses:
+        200:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+      x-codegen-request-body-name: body
+    delete:
+      tags:
+      - trackItem
+      summary: Delete a track item
+      operationId: deleteTrackItemById
+      parameters:
+      - name: trackItemId
+        in: path
+        description: Primary key of the track item object referenced
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+  /step:
+    post:
+      tags:
+      - record
+      summary: Create a step
+      operationId: createStep
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VersionedRecord'
+        required: true
+      responses:
+        201:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+      x-codegen-request-body-name: body
+  /step/{stepId}:
+    get:
+      tags:
+      - record
+      summary: Fetch a step
+      operationId: getStepById
+      parameters:
+      - name: stepId
+        in: path
+        description: Primary key of the step object referenced
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+    put:
+      tags:
+      - record
+      summary: Update a step
+      operationId: updateStepById
+      parameters:
+      - name: stepId
+        in: path
+        description: Primary key of the step object referenced
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VersionedRecord'
+        required: true
+      responses:
+        200:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+      x-codegen-request-body-name: body
+    delete:
+      tags:
+      - record
+      summary: Delete a step
+      operationId: deleteStepById
+      parameters:
+      - name: stepId
+        in: path
+        description: Primary key of the step object referenced
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+  /mile:
+    post:
+      tags:
+      - record
+      summary: Create a mile
+      operationId: createMile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VersionedRecord'
+        required: true
+      responses:
+        201:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+      x-codegen-request-body-name: body
+  /mile/{mileId}:
+    get:
+      tags:
+      - record
+      summary: Fetch a mile
+      operationId: getMileById
+      parameters:
+      - name: mileId
+        in: path
+        description: Primary key of the mile object referenced
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+    put:
+      tags:
+      - record
+      summary: Update a mile
+      operationId: updateMileById
+      parameters:
+      - name: mileId
+        in: path
+        description: Primary key of the mile object referenced
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VersionedRecord'
+        required: true
+      responses:
+        200:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+      x-codegen-request-body-name: body
+    delete:
+      tags:
+      - record
+      summary: Delete a mile
+      operationId: deleteMileById
+      parameters:
+      - name: mileId
+        in: path
+        description: Primary key of the mile object referenced
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+  /league:
+    post:
+      tags:
+      - record
+      summary: Create a league
+      operationId: createLeague
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VersionedRecord'
+        required: true
+      responses:
+        201:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+      x-codegen-request-body-name: body
+  /league/{leagueId}:
+    get:
+      tags:
+      - record
+      summary: Fetch a league
+      operationId: getLeagueById
+      parameters:
+      - name: leagueId
+        in: path
+        description: Primary key of the league object referenced
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+    put:
+      tags:
+      - record
+      summary: Update a league
+      operationId: updateLeagueById
+      parameters:
+      - name: leagueId
+        in: path
+        description: Primary key of the league object referenced
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VersionedRecord'
+        required: true
+      responses:
+        200:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+      x-codegen-request-body-name: body
+    delete:
+      tags:
+      - record
+      summary: Delete a league
+      operationId: deleteLeagueById
+      parameters:
+      - name: leagueId
+        in: path
+        description: Primary key of the league object referenced
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          $ref: '#/components/responses/GeneralSuccessResponse'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/GeneralFailureResponse'
+  /porn:
+    get:
+      tags:
+      - misc
+      summary: Attempt to access a pornographic resource from this server
+      responses:
+        418:
+          description: :(
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/FailureResponse'
+components:
+  schemas:
+    UserProfile:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: Debra
+        lastName:
+          type: string
+          example: Abraca
+        birthDate:
+          type: string
+          format: date
+          example: 2000-01-01
+        locale:
+          type: string
+          format: LDML
+          example: en-US
+        privacyScope:
+          type: string
+          example: friends
+          enum:
+          - public
+          - friends
+          - private
+      xml:
+        name: UserProfile
+    TrackItem:
+      type: object
+      required:
+        - createdAt
+        - title
+        - description
+        - dueDate
+        - priority
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        title:
+          type: string
+        description:
+          type: string
+        dueDate:
+          type: string
+          format: date-time
+        priority:
+          type: integer
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+      xml:
+        name: TrackItem
+    VersionedRecord:
+      required:
+      - createdAt
+      - description
+      - displayName
+      - title
+      - verifiedContemporaneousRecord
+      - version
+      type: object
+      properties:
+        displayName:
+          type: string
+          example: Jogging
+        version:
+          minimum: 1
+          type: integer
+          example: 1
+        createdAt:
+          type: string
+          format: date-time
+        title:
+          type: string
+          example: Running along trail
+        description:
+          type: string
+          example: Running a stretch of 1 mile along the Minutemen bike trail.
+        verifiedContemporaneousRecord:
+          type: boolean
+          example: true
+        parent:
+          type: integer
+          description: The primary key of the parent record, if exists
+        children:
+          type: array
+          items:
+            type: integer
+          description: The primary key of the children records, if exist
+      xml:
+        name: VersionedRecord
+    SuccessResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties: {}
+          description: An object carrying a payload of data
+      description: Request has been processed successfully
+    FailureResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: object
+          required:
+          - statusCode
+          - message
+          properties:
+            statusCode:
+              type: integer
+            message:
+              type: string
+            errorCode:
+              type: string
+            scope:
+              type: string
+      description: Request failed due to a problem with the request
+      externalDocs:
+        description: Failure responses
+        url: https://github.com/mumingpo/perman-api-specification/blob/main/v1/failureResponses.js
+    ErrorResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: object
+          required:
+          - statusCode
+          - message
+          properties:
+            statusCode:
+              type: integer
+            message:
+              type: string
+            errorCode:
+              type: string
+            scope:
+              type: string
+          description: A message indicating the problem experienced by the server
+      description: Request failed due to a problem with the server
+  responses:
+    GeneralSuccessResponse:
+      description: The request has been successfully executed
+      content:
+        application/json:
+          examples:
+            Success:
+              $ref: '#/components/examples/SuccessfulRequest'
+          schema:
+            $ref: '#/components/schemas/SuccessResponse'
+    GeneralFailureResponse:
+      description: Something is wrong with the user's request
+      content:
+        application/json:
+          examples:
+            BadRequest:
+              $ref: '#/components/examples/BadRequest'
+            Unauthorized:
+              $ref: '#/components/examples/Unauthorized'
+            Forbidden:
+              $ref: '#/components/examples/Forbidden'
+            NotFound:
+              $ref: '#/components/examples/NotFound'
+            PayloadTooLarge:
+              $ref: '#/components/examples/PayloadTooLarge'
+            UsernameAlreadyInUse:
+              $ref: '#/components/examples/UsernameAlreadyInUse'
+            IncorrectUsernameFormat:
+              $ref: '#/components/examples/IncorrectUsernameFormat'
+            UsernameNotInUse:
+              $ref: '#/components/examples/UsernameNotInUse'
+            EmailAlreadyInUse:
+              $ref: '#/components/examples/EmailAlreadyInUse'
+            IncorrectEmailFormat:
+              $ref: '#/components/examples/IncorrectEmailFormat'
+            EmailNotInUse:
+              $ref: '#/components/examples/EmailNotInUse'
+            EmailNotVerified:
+              $ref: '#/components/examples/EmailNotVerified'
+            EmailAlreadyVerified:
+              $ref: '#/components/examples/EmailAlreadyVerified'
+            PasswordIncorrect:
+              $ref: '#/components/examples/PasswordIncorrect'
+            PasswordTooSimple:
+              $ref: '#/components/examples/PasswordTooSimple'
+            PasswordCompromised:
+              $ref: '#/components/examples/PasswordCompromised'
+            AccountRecoveryTokenInvalid:
+              $ref: '#/components/examples/AccountRecoveryTokenInvalid'
+            AccountRecoveryTokenExpired:
+              $ref: '#/components/examples/AccountRecoveryTokenExpired'
+            TooManyRequests:
+              $ref: '#/components/examples/TooManyRequests'
+            RequestHeaderFieldsTooLarge:
+              $ref: '#/components/examples/RequestHeaderFieldsTooLarge'
+          schema:
+            $ref: '#/components/schemas/FailureResponse'
+    '500':
+      description: The server has encountered an internal error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    '503':
+      description: The server is temporarily unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  examples:
+    SuccessfulRequest:
+      summary: Response for a successful request
+      value:
+        data: {}
+    BadRequest:
+      summary: The API request is missing required fields.
+      value: '{"data": {"statusCode":400,"errorCode":"BadRequest","scope":"misc","message":"The API request is missing required fields."}}'
+    Unauthorized:
+      summary: User must log in to perform the requested action.
+      value: '{"data": {"statusCode":401,"errorCode":"Unauthorized","scope":"auth","message":"User must log in to perform the requested action."}}'
+    Forbidden:
+      summary: User is not authorized to perform the requested action.
+      value: '{"data": {"statusCode":403,"errorCode":"Forbidden","scope":"privilege","message":"User is not authorized to perform the requested action."}}'
+    NotFound:
+      summary: The requested resource is not found on the server.
+      value: '{"data": {"statusCode":404,"errorCode":"NotFound","scope":"misc","message":"The requested resource is not found on the server."}}'
+    PayloadTooLarge:
+      summary: The body of the request is too large.
+      value: '{"data": {"statusCode":413,"errorCode":"PayloadTooLarge","scope":"misc","message":"The body of the request is too large."}}'
+    UsernameAlreadyInUse:
+      summary: An account with this username already exists.
+      value: '{"data": {"statusCode":422,"errorCode":"UsernameAlreadyInUse","scope":"user","message":"An account with this username already exists."}}'
+    IncorrectUsernameFormat:
+      summary: The provided username does not appear to match the format requirement
+      value: '{"data": {"statusCode":422,"errorCode":"IncorrectUsernameFormat","scope":"user","message":"The provided username does not appear to match the format requirement"}}'
+    UsernameNotInUse:
+      summary: There does not appear to be an account associated with this username.
+      value: '{"data": {"statusCode":422,"errorCode":"UsernameNotInUse","scope":"user","message":"There does not appear to be an account associated with this username."}}'
+    EmailAlreadyInUse:
+      summary: An account with this email already exists.
+      value: '{"data": {"statusCode":422,"errorCode":"EmailAlreadyInUse","scope":"user","message":"An account with this email already exists."}}'
+    IncorrectEmailFormat:
+      summary: The provided email address does not appear to be in the correct format
+      value: '{"data": {"statusCode":422,"errorCode":"IncorrectEmailFormat","scope":"user","message":"The provided email address does not appear to be in the correct format"}}'
+    EmailNotInUse:
+      summary: There does not appear to be an account associated with this email address.
+      value: '{"data": {"statusCode":422,"errorCode":"EmailNotInUse","scope":"user","message":"There does not appear to be an account associated with this email address."}}'
+    EmailNotVerified:
+      summary: The email address associated with this account has yet to be verified.
+      value: '{"data": {"statusCode":422,"errorCode":"EmailNotVerified","scope":"user","message":"The email address associated with this account has yet to be verified."}}'
+    EmailAlreadyVerified:
+      summary: The email address associated with this account has already been verified.
+      value: '{"data": {"statusCode":422,"errorCode":"EmailAlreadyVerified","scope":"user","message":"The email address associated with this account has already been verified."}}'
+    PasswordIncorrect:
+      summary: The provided password does not match with our records.
+      value: '{"data": {"statusCode":422,"errorCode":"PasswordIncorrect","scope":"user","message":"The provided password does not match with our records."}}'
+    PasswordTooSimple:
+      summary: Your new password is too simple.
+      value: '{"data": {"statusCode":422,"errorCode":"PasswordTooSimple","scope":"user","message":"Your new password is too simple."}}'
+    PasswordCompromised:
+      summary: This password has been compromised thus is unsafe to use. Please visit https://haveibeenpwned.com/Passwords for details.
+      value: '{"data": {"statusCode":422,"errorCode":"PasswordCompromised","scope":"user","message":"This password has been compromised thus is unsafe to use. Please visit https://haveibeenpwned.com/Passwords for details."}}'
+    AccountRecoveryTokenInvalid:
+      summary: The provided authentication token is invalid.
+      value: '{"data": {"statusCode":422,"errorCode":"AccountRecoveryTokenInvalid","scope":"user","message":"The provided authentication token is invalid."}}'
+    AccountRecoveryTokenExpired:
+      summary: The provided authentication token has expired.
+      value: '{"data": {"statusCode":422,"errorCode":"AccountRecoveryTokenExpired","scope":"user","message":"The provided authentication token has expired."}}'
+    TooManyRequests:
+      summary: You have recently made too many requests. Please try again later.
+      value: '{"data": {"statusCode":429,"errorCode":"TooManyRequests","scope":"misc","message":"You have recently made too many requests. Please try again later."}}'
+    RequestHeaderFieldsTooLarge:
+      summary: The header portion of your request is too large.
+      value: '{"data": {"statusCode":431,"errorCode":"RequestHeaderFieldsTooLarge","scope":"misc","message":"The header portion of your request is too large."}}'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    googleIdentity:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://www.google.com/
+          tokenUrl: balabala
+          refreshUrl: balabala
+          scopes: {}
+security:
+  - googleIdentity: []
