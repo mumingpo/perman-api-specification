@@ -21,10 +21,12 @@ const taskCreationCodec = p.object({
   description: strict.stringCodec,
 });
 
-const taskArrayCodec = p.array(taskCodec);
+const currentTasksCodec = p.object({
+  currentTasks: p.array(taskCodec),
+});
 
 export {
   taskCodec,
   taskCreationCodec,
-  taskArrayCodec,
+  currentTasksCodec,
 };
