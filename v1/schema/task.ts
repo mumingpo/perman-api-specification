@@ -4,6 +4,7 @@ import { dateCodec } from './common';
 const allowedPriorityValues = [0, 1, 2, 3] as const;
 
 const taskCodec = p.object({
+  id: strict.numberCodec,
   dueDate: dateCodec,
   priority: makeEnum.makeEnumNumberCodec(allowedPriorityValues),
   title: strict.stringCodec,

@@ -19,7 +19,7 @@ const usernameDeserializer = (unk: unknown) => {
     throw errorResponses.IncorrectUsernameFormat;
   }
   return unk.toLowerCase();
-}
+};
 const usernameCodec = p.primitive(usernameSerializer, usernameDeserializer, 'usernameCodec');
 
 const emailSerializer = (s: string) => (s);
@@ -31,7 +31,7 @@ const emailDeserializer = (unk: unknown) => {
     throw errorResponses.IncorrectEmailFormat;
   }
   return unk.toLowerCase();
-}
+};
 const emailCodec = p.primitive(emailSerializer, emailDeserializer, 'emailCodec');
 
 const passwordSerializer = (s: string) => (s);
@@ -43,11 +43,16 @@ const passwordDeserializer = (unk: unknown) => {
     throw errorResponses.IncorrectPasswordFormat;
   }
   return unk;
-}
+};
 const passwordCodec = p.primitive(passwordSerializer, passwordDeserializer, 'passwordCodec');
 
+// NAU = Not An Update, so it is permissible to use a less strict type.
 const userCodec = p.object({
   username: usernameCodec,
+  email: emailCodec,
+});
+
+const emailBodyCodec = p.object({
   email: emailCodec,
 });
 
@@ -56,35 +61,36 @@ const usernameBodyCodec = p.object({
 });
 
 const usernameLoginCodec = p.object({
-  username: usernameCodec,
-  password: passwordCodec,
+  username: usernameCodec, // NAU, but need lowercasing
+  password: strict.stringCodec, // NAU
 });
 
 const emailLoginCodec = p.object({
-  email: emailCodec,
-  password: passwordCodec,
+  email: emailCodec, // NAU, but need lowercasing
+  password: strict.stringCodec, // NAU
 });
 
 const accountInitializationCodec = p.object({
-  token: strict.stringCodec,
-  email: emailCodec,
+  token: strict.stringCodec, // NAU
+  email: emailCodec, // NAU, but need lowercasing
   username: usernameCodec,
   password: passwordCodec,
 });
 
 const passwordResetCodec = p.object({
-  token: strict.stringCodec,
-  email: emailCodec,
+  token: strict.stringCodec, // NAU
+  email: emailCodec, // NAU, but need lowercasing
   newPassword: passwordCodec,
 });
 
 const changePasswordCodec = p.object({
-  oldPassword: strict.stringCodec,
+  oldPassword: strict.stringCodec, // NAU
   newPassword: passwordCodec,
 });
 
 export {
   userCodec,
+  emailBodyCodec,
   usernameBodyCodec,
   usernameLoginCodec,
   emailLoginCodec,
@@ -92,4 +98,3 @@ export {
   passwordResetCodec,
   changePasswordCodec,
 };
-

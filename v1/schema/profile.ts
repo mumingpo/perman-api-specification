@@ -18,11 +18,13 @@ const profileCodec = p.object({
   profileImage: strict.stringCodec,
   locale: strict.stringCodec,
   precrastination: strict.numberCodec,
-  birthDate: dateCodec,
+  birthDate: p.optional(dateCodec),
   privacyScope: makeEnum.makeEnumStringCodec(allowedPrivacyOptions, 'friends'),
   theme: makeEnum.makeEnumStringCodec(allowedThemeOptions, 'light'),
 });
 
 export {
   profileCodec,
+  allowedPrivacyOptions,
+  allowedThemeOptions,
 };
