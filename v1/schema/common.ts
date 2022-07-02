@@ -8,7 +8,7 @@ const dateCodec = p.primitive(
       : new Date(`${unk}`);
 
     if (Number.isNaN(date.getTime())) {
-      throw new Error(`${dateCodec} cannot decode ${unk} of type ${typeof unk}`);
+      throw new Error(`dateCodec cannot decode ${unk} of type ${typeof unk}`);
     }
 
     return date;
@@ -31,7 +31,7 @@ const nullableDateCodec = p.primitive(
       : new Date(`${unk}`);
 
     if (Number.isNaN(date.getTime())) {
-      throw new Error(`${dateCodec} cannot decode ${unk} of type ${typeof unk}`);
+      throw new Error(`nullableDateCodec cannot decode ${unk} of type ${typeof unk}`);
     }
 
     return date;

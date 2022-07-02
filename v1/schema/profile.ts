@@ -1,5 +1,5 @@
 import p, { strict, makeEnum } from '@mumingpo/primate';
-import { dateCodec } from './common';
+import { nullableDateCodec } from './common';
 
 const allowedPrivacyOptions = [
   'public',
@@ -18,7 +18,7 @@ const profileCodec = p.object({
   profileImage: strict.stringCodec,
   locale: strict.stringCodec,
   precrastination: strict.numberCodec,
-  birthDate: p.optional(dateCodec),
+  birthDate: nullableDateCodec,
   privacyScope: makeEnum.makeEnumStringCodec(allowedPrivacyOptions, 'friends'),
   theme: makeEnum.makeEnumStringCodec(allowedThemeOptions, 'light'),
 });

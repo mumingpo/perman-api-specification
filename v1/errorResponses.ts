@@ -4,8 +4,6 @@
 
 import createError from 'http-errors';
 
-type WithErrorCode<S = string> = { errorCode: S };
-
 const errors = {
   BadRequest: createError(400, 'The API request is missing required fields.'),
   Unauthorized: createError(401, 'User must log in to perform the requested action.'),
@@ -31,6 +29,7 @@ const errors = {
   InternalServerError: createError(501, 'We have encountered an unspecified error while processing your request, sorry :('),
 } as const;
 
+// DRY: annotate each error with their errorcode.
 Object.keys(errors).forEach((key) => {
   const k = key as keyof typeof errors;
   Object.defineProperty(errors[k], 'errorCode', {
@@ -41,8 +40,9 @@ Object.keys(errors).forEach((key) => {
   });
 });
 
+// Typescript magic to extend the HttpErrors to include errorCode.
+type WithErrorCode<S = string> = { errorCode: S };
 type Errors = typeof errors;
-
 const errorResponses = errors as {
   [key in keyof Errors]: Errors[key] & WithErrorCode<key>
 };
@@ -50,6 +50,12 @@ const errorResponses = errors as {
 type ErrorResponses = typeof errorResponses;
 type DefinedError = ErrorResponses[keyof ErrorResponses];
 
+/**
+ * Make sure that an error is a standardized error
+ * @param e Error to standardize
+ * @param defaultError default error when e is invalid
+ * @returns a standardized error
+ */
 const standardizeError: (e: unknown, defaultError?: DefinedError) => DefinedError = (
   e,
   defaultError = errorResponses.InternalServerError,
@@ -66,6 +72,12 @@ const standardizeError: (e: unknown, defaultError?: DefinedError) => DefinedErro
   return errorResponses[errorCode as keyof ErrorResponses];
 };
 
+/**
+ * Make sure that the factory method throws a standardized error;
+ * @param f factory method to be executed
+ * @param defaultError default error to rethrow when f throws an invalid error
+ * @returns f()
+ */
 const safelyDo: <T>(f: () => T, defaultError?: DefinedError) => T = (
   f,
   defaultError = errorResponses.InternalServerError,
