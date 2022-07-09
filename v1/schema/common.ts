@@ -43,13 +43,15 @@ const nullableDateCodec = p.primitive(
 // BROWSER DOES NOT SUPPORT THE BUFFER DATATYPE!
 const bufferToBase64Codec = p.primitive(
   (buf: Buffer) => {
-    if (window) {
+    // @ts-expect-error development sanity check for non-browser environment
+    if (typeof window !== 'undefined') {
       throw new Error('bufferToBase64Codec does not work in browser!');
     }
     return buf.toString('base64');
   },
   (unk: unknown) => {
-    if (window) {
+    // @ts-expect-error development sanity check for non-browser environment
+    if (typeof window !== 'undefined') {
       throw new Error('bufferToBase64Codec does not work in browser!');
     }
     if (typeof unk !== 'string') {

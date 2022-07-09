@@ -1,6 +1,8 @@
 import p, { strict } from '@mumingpo/primate';
 import validator from 'validator';
 
+import type { JsonWebKey } from 'crypto';
+
 import errorResponses from '../errorResponses';
 
 const STRONG_PASSWORD_REQUIREMENTS: validator.strongPasswordOptions = {
