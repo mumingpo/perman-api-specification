@@ -10,6 +10,17 @@ const STRONG_PASSWORD_REQUIREMENTS: validator.strongPasswordOptions = {
   minNumbers: 1,
 };
 
+const lowercasingCodec = p.primitive(
+  (s: string) => (s),
+  (unk: unknown) => {
+    if (typeof unk !== 'string') {
+      throw new Error('lowercasingCodec can only deserialize strings');
+    }
+    return unk.toLowerCase();
+  },
+  'lowercasingCodec',
+);
+
 const usernameSerializer = (s: string) => (s);
 const usernameDeserializer = (unk: unknown) => {
   if (typeof unk !== 'string') {
@@ -46,10 +57,20 @@ const passwordDeserializer = (unk: unknown) => {
 };
 const passwordCodec = p.primitive(passwordSerializer, passwordDeserializer, 'passwordCodec');
 
+const jwkSerializer = (key: JsonWebKey) => (key);
+// no good way to typecheck it, defer it until importkey.
+const jwkDeserializer = (unk: unknown) => (unk as JsonWebKey);
+const jwkCodec = p.primitive(
+  jwkSerializer,
+  jwkDeserializer,
+  'jwkCodec',
+);
+
 // NAU = Not An Update, so it is permissible to use a less strict type.
 const userCodec = p.object({
   username: usernameCodec,
   email: emailCodec,
+  key: jwkCodec,
 });
 
 const emailBodyCodec = p.object({
@@ -61,25 +82,25 @@ const usernameBodyCodec = p.object({
 });
 
 const usernameLoginCodec = p.object({
-  username: usernameCodec, // NAU, but need lowercasing
+  username: lowercasingCodec, // NAU, but need lowercasing
   password: strict.stringCodec, // NAU
 });
 
 const emailLoginCodec = p.object({
-  email: emailCodec, // NAU, but need lowercasing
+  email: lowercasingCodec, // NAU, but need lowercasing
   password: strict.stringCodec, // NAU
 });
 
 const accountInitializationCodec = p.object({
   token: strict.stringCodec, // NAU
-  email: emailCodec, // NAU, but need lowercasing
+  email: lowercasingCodec, // NAU, but need lowercasing
   username: usernameCodec,
   password: passwordCodec,
 });
 
 const passwordResetCodec = p.object({
   token: strict.stringCodec, // NAU
-  email: emailCodec, // NAU, but need lowercasing
+  email: lowercasingCodec, // NAU, but need lowercasing
   newPassword: passwordCodec,
 });
 
