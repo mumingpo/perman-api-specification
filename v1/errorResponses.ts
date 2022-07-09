@@ -65,7 +65,7 @@ const standardizeError: (e: unknown, defaultError?: DefinedError) => DefinedErro
   }
 
   const errorCode = `${e.errorCode}`;
-  if (!Object.hasOwn(errorResponses, errorCode)) {
+  if (!(errorCode in errorResponses)) {
     return defaultError;
   }
 

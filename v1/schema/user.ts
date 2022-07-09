@@ -8,6 +8,7 @@ const STRONG_PASSWORD_REQUIREMENTS: validator.strongPasswordOptions = {
   minLowercase: 1,
   minUppercase: 1,
   minNumbers: 1,
+  minSymbols: 0,
 };
 
 const lowercasingCodec = p.primitive(
